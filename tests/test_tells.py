@@ -322,6 +322,20 @@ def test_audit_script_reports_a_missing_path():
     assert out.returncode == 2 and 'No such file' in out.stderr, (out.returncode, out.stderr)
 
 
+def test_version_is_bumped_when_the_skill_changes():
+    # Installed plugins update only when plugin.json's version changes. Skipped outside git or before the first tag.
+    root = os.path.join(HERE, '..')
+    git = lambda *a: subprocess.run(['git', '-C', root] + list(a), capture_output=True, text=True)
+    tag = git('describe', '--tags', '--abbrev=0', '--match', 'v*').stdout.strip()
+    if not tag:
+        return
+    with open(os.path.join(root, '.claude-plugin', 'plugin.json'), encoding='utf-8') as fh:
+        version = json.load(fh)['version']
+    changed = git('diff', '--quiet', tag, '--', 'skills/').returncode != 0
+    assert not (changed and version == tag[1:]), (
+        'skills/ changed since {0} but plugin.json is still {1}; bump the version'.format(tag, version))
+
+
 def main():
     tests = [v for k, v in sorted(globals().items()) if k.startswith('test_') and callable(v)]
     failed = 0
