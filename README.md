@@ -36,7 +36,7 @@ Ask Claude in your own words:
 - "Does this email sound like ChatGPT wrote it?" followed by the pasted text.
 - "Tighten this README and fix what you find."
 
-Or run the linter pass yourself:
+Or run the linter pass yourself. From a clone of this repo:
 
 ```bash
 skills/ai-tells-auditor/scripts/audit.sh draft.md              # one line per finding
@@ -87,7 +87,7 @@ A robust estimator.
 python3 tests/test_tells.py    # or: pytest. Needs vale on PATH, or VALE=/path/to/vale
 ```
 
-Most tests use `tests/vale.ini`, which turns on `Custom` only, so a pack update doesn't change them. Two tests run `audit.sh` with the full config.
+Most tests use `tests/vale.ini`, which turns on `Custom` only, so a pack update doesn't change them. Tests that call `audit.sh` use the full config.
 
 ## Extending
 
