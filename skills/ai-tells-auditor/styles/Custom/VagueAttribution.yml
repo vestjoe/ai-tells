@@ -1,0 +1,15 @@
+extends: existence
+message: "Unsourced attribution; cite the source or cut. '%s'"
+level: warning
+ignorecase: true
+tokens:
+  - studies show
+  - research shows
+  - experts say
+  - experts agree
+  - many believe
+  - it is widely
+  - some say
+  - critics argue
+  - it is often said
+  - industry reports

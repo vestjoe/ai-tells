@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+# Eval runs from skill-creator.
+*-workspace/
+# Fetched by `vale sync`; pinned in skills/ai-tells-auditor/.vale.ini.
+skills/ai-tells-auditor/styles/ai-tells/
+skills/ai-tells-auditor/styles/proselint/
+skills/ai-tells-auditor/styles/write-good/
+skills/ai-tells-auditor/styles/Microsoft/
+skills/ai-tells-auditor/styles/Google/
+skills/ai-tells-auditor/styles/config/templates/

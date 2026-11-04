@@ -1,0 +1,16 @@
+# journey, north star, and ecosystem are gated as in vale-ai-tells (MIT): "the user journey", "the North Star",
+# and "the Rust ecosystem" are literal or terms of art.
+extends: existence
+message: "Inflated noun or metaphor; name the thing. '%s'"
+level: warning
+ignorecase: true
+nonword: true
+tokens:
+  - '\b(?:landscape|realm|tapestry|synergy|synergies|cornerstone|paradigm|plethora|myriad|interplay|linchpin|beacon)\b'
+  - '\b(?:treasure\s+trove|deep\s+dive)\b'
+  - '(?<=\b(?:the|a|our|this|that|its|your|their|own)\s)journey\b'
+  - '\bjourney(?=\s+(?:from|to|into|towards?)\b)'
+  - '(?<=\b(?:our|your|their|its)\s)north\s+star\b'
+  - '\bnorth\s+star(?=\s+(?:metric|goal)s?\b)'
+  - '\bnorth-star\b'
+  - '\b(?:vibrant|thriving|rich|growing|flourishing|entire|broader|wider)\s+ecosystems?\b'

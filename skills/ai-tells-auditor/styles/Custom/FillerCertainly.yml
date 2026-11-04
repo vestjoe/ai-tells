@@ -1,0 +1,6 @@
+extends: existence
+message: "Exclamatory agreement; start with the answer. '%s'"
+level: warning
+nonword: true
+tokens:
+  - '(?:^|(?<=\s))(?:Certainly|Absolutely|Of course)!'

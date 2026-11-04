@@ -1,0 +1,5 @@
+extends: script
+message: "%s"
+level: warning
+scope: summary
+script: RuleOfThree.tengo

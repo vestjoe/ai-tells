@@ -1,0 +1,13 @@
+extends: existence
+message: "Service filler; delete it or say the next step plainly. '%s'"
+level: error
+ignorecase: true
+tokens:
+  - I hope this helps
+  - happy to help
+  - feel free to
+  - let me know if you have any
+  - 'don[\x27’]t hesitate to'
+  - 'I[\x27’]m thrilled'
+  - 'I[\x27’]m excited to'
+  - rest assured

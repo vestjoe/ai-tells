@@ -1,0 +1,7 @@
+extends: existence
+message: "A rhetorical question answered at once; make the statement. '%s'"
+level: warning
+ignorecase: true
+nonword: true
+tokens:
+  - '\?\s+(?:Because|Simple[.:]|It[\x27’]s simple|The answer is|Here[\x27’]s why|Easy[.:])'

@@ -1,0 +1,9 @@
+extends: existence
+message: "Praise for the question or request; delete it. '%s'"
+level: error
+ignorecase: true
+tokens:
+  - great question
+  - excellent question
+  - good question
+  - what a great

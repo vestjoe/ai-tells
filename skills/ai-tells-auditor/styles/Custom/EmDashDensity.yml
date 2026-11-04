@@ -1,0 +1,6 @@
+extends: occurrence
+message: "More than one em dash in one paragraph."
+level: warning
+scope: paragraph
+max: 1
+token: '—|(?<=\s)--(?=\s)'

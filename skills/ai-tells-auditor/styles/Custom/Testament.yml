@@ -1,0 +1,14 @@
+extends: existence
+message: "Editorial aside; cut it or source it. '%s'"
+level: error
+ignorecase: true
+tokens:
+  - a testament to
+  - speaks volumes
+  - a powerful signal
+  - a clear signal
+  - making it clear that
+  - it is clear that
+  - 'it[\x27’]s clear that'
+  - a broader shift
+  - paints a picture

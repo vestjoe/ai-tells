@@ -1,0 +1,9 @@
+extends: existence
+message: "Throat-clearing transition; start with the point. '%s'"
+level: suggestion
+ignorecase: true
+nonword: true
+scope: sentence
+tokens:
+  - '^(?-i:(?=[A-Z]))(?:Moreover|Furthermore|Additionally|Notably|Importantly|Interestingly|Indeed|Consequently)\b'
+  - '^(?-i:(?=[A-Z]))(?:In addition|That said|With that in mind|It[\x27’]s worth noting|It is worth noting|It bears mentioning)\b'

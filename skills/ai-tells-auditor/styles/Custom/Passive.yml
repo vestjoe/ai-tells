@@ -1,0 +1,8 @@
+# A heuristic: a "be" verb, an optional -ly adverb, then an -ed word or a listed irregular participle.
+extends: existence
+message: "Likely passive; name who acts, if it matters. '%s'"
+level: suggestion
+ignorecase: true
+nonword: true
+tokens:
+  - '\b(?:am|is|are|was|were|be|been|being)\s+(?:\w+ly\s+)?(?:\w+ed|known|made|done|given|taken|seen|shown|written|built|found|held|kept|left|told|thought|brought|caught|taught|sent|spent|lost|paid|begun|chosen|driven|drawn|grown|hidden|broken|spoken|frozen|forgotten|understood)\b'

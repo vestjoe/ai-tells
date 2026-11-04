@@ -1,0 +1,9 @@
+extends: existence
+message: "A summary that restates the body; cut it or say something new. '%s'"
+level: error
+ignorecase: true
+nonword: true
+scope: sentence
+tokens:
+  - '^(?-i:(?=[A-Z]))(?:In summary|In conclusion|In short|To sum up|In essence|The takeaway|The bottom line|All in all)\b'
+  - '^(?-i:(?=[A-Z]))(?:Overall|Ultimately),'

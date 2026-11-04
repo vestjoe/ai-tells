@@ -1,0 +1,22 @@
+extends: existence
+message: "Hedge; commit to the claim or state the limit. '%s'"
+level: suggestion
+ignorecase: true
+tokens:
+  - arguably
+  - potentially
+  - essentially
+  - basically
+  - in many ways
+  - to some extent
+  - to a certain extent
+  - may help to
+  - can help to
+  - might be able to
+  - it could be argued
+  - generally speaking
+  - more or less
+  - somewhat
+  - relatively
+  - fairly
+  - quite

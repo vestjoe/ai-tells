@@ -1,0 +1,8 @@
+extends: existence
+message: "Set-up-and-reveal; state the point directly. '%s'"
+level: error
+ignorecase: true
+nonword: true
+tokens:
+  - '\bThe (?:result|answer|catch|kicker|truth|reality|twist|secret|key|best part)\s*[:?]'
+  - '\bHere[\x27’]s (?:the thing|why|the kicker|the catch|what)\s*[:?]'

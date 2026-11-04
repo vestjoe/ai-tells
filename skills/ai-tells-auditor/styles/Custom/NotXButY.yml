@@ -1,0 +1,7 @@
+extends: existence
+message: "'Not just X, but Y' contrast; state Y. '%s'"
+level: error
+ignorecase: true
+nonword: true
+tokens:
+  - '\b(?:not|isn[\x27’]t|aren[\x27’]t|wasn[\x27’]t)\s+(?:just|only|merely|simply)\b[^.!?\n]{0,80}?\b(?:but|it[\x27’]s|it is|they[\x27’]re)\b'

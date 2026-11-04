@@ -1,0 +1,7 @@
+extends: existence
+message: "A stack of '-ing' clauses; split into sentences. '%s'"
+level: suggestion
+ignorecase: true
+nonword: true
+tokens:
+  - ',\s+\w+ing\b[^,.;\n]{1,40},\s+\w+ing\b[^,.;\n]{1,40},?\s+and\s+\w+ing\b'

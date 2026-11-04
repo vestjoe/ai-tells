@@ -1,0 +1,7 @@
+# Human tutorials use these often (6 hits in 12 chapters of the 2019 Rust Book), so they rank low.
+extends: existence
+message: "A 'let's' walkthrough opener; fine in a tutorial, cut it elsewhere. '%s'"
+level: suggestion
+ignorecase: true
+tokens:
+  - 'let[\x27’]s (?:break|explore|take a look)'

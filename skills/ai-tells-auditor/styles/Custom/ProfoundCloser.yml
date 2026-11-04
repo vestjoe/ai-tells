@@ -1,0 +1,11 @@
+extends: existence
+message: "A closing line meant to sound profound; cut it. '%s'"
+level: warning
+ignorecase: true
+tokens:
+  - and that changes everything
+  - and that makes all the difference
+  - the rest is history
+  - and that is the point
+  - 'and that[\x27’]s the point'
+  - more than ever

@@ -1,0 +1,13 @@
+// More than 6 lists of three per 1000 words, and at least 3, is one alert for the document.
+text := import("text")
+fmt := import("fmt")
+
+matches := []
+words := text.re_find(`\b\w+\b`, scope, -1)
+found := text.re_find(`\b[\w-]+,\s+[\w-]+,?\s+(?:and|or)\s+[\w-]+\b`, scope, -1)
+n := found == undefined ? 0 : len(found)
+w := words == undefined ? 0 : len(words)
+if w > 0 && n >= 3 && n * 1000.0 / w > 6 {
+  matches = append(matches, {begin: 0, end: 1,
+    message: fmt.sprintf("%d lists of three in %d words; check each needs exactly three items.", n, w)})
+}

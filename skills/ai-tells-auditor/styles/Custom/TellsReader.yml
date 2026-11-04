@@ -1,0 +1,7 @@
+extends: existence
+message: "Tells the reader what to conclude; let the fact stand, or say who concludes it. '%s'"
+level: warning
+ignorecase: true
+nonword: true
+tokens:
+  - '\b(?:which|this|that|it)\s+(?:shows|highlights|underscores|demonstrates|illustrates|speaks to|signals|reflects|reinforces|emphasizes)\b(?!\s+up\b)'

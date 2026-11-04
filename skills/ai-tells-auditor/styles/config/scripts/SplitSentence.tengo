@@ -1,0 +1,89 @@
+// Flags the last word of a prose line that doesn't end a sentence when the same paragraph continues on the next
+// line. Pass 1 marks which lines are prose; pass 2 checks each pair of prose lines. Offsets are bytes, as Vale
+// expects.
+text := import("text")
+
+matches := []
+lines := text.split(scope, "\n")
+n := len(lines)
+
+starts := []
+pos := 0
+for l in lines {
+    starts = append(starts, pos)
+    pos += len(l) + 1
+}
+
+item := `^\s*(?:[-*+]|\d+[.)])\s`
+fence := `^\s*(?:` + "```" + `|~~~)`
+// Checked after quote markers are stripped: a heading, table row, HTML, reference definition, rule line, or a
+// GitHub note marker such as [!NOTE].
+not_prose := `^(?:#|\||<|\[[^\]^]+\]:|[-*_]{3,}$|\[![A-Za-z]+\]$)`
+
+// Pass 1: prose[i] is true for a line of paragraph, list, quote, or footnote text.
+prose := []
+in_fence := false
+in_comment := false
+in_front := false
+front := ""
+in_code := false
+in_list := false
+prev_blank := true
+for i := 0; i < n; i++ {
+    l := lines[i]
+    t := text.trim_space(l)
+    p := false
+    if i == 0 && (t == "---" || t == "+++") {
+        in_front = true
+        front = t
+    } else if in_front {
+        if t == front {
+            in_front = false
+        }
+    } else if in_comment {
+        if text.contains(l, "-->") {
+            in_comment = false
+        }
+    } else if text.contains(l, "<!--") && !text.contains(l, "-->") {
+        in_comment = true
+    } else if text.re_match(fence, l) {
+        in_fence = !in_fence
+    } else if in_fence || t == "" {
+        p = false
+    } else {
+        // Indented code: 4 spaces or a tab after a blank line, outside a list (in a list, it is the item's text).
+        indented := text.has_prefix(l, "    ") || text.has_prefix(l, "\t")
+        in_code = indented && (in_code || (prev_blank && !in_list))
+        if !indented {
+            in_list = text.re_match(item, l)
+        }
+        p = !in_code && !text.re_match(not_prose, text.re_replace(`^(?:>\s?)+`, t, ""))
+    }
+    prev_blank = t == ""
+    prose = append(prose, p)
+}
+
+// Pass 2: a prose line followed by more of the same paragraph must end a sentence.
+for i := 0; i + 1 < n; i++ {
+    l := lines[i]
+    next := lines[i + 1]
+    if !prose[i] || !prose[i + 1] || text.re_match(item, next) {
+        continue
+    }
+    // Two trailing spaces or a backslash is a deliberate Markdown line break.
+    if text.has_suffix(l, "  ") || text.has_suffix(l, "\\") {
+        continue
+    }
+    t := text.trim_space(l)
+    // A sentence end, then any closing marks and an optional footnote reference.
+    if text.re_match(`[.!?:]["'’”)\]*_`+"`"+`]*(?:\[\^[^\]]+\])?$`, t) {
+        continue
+    }
+    last := text.re_find(`\S+\s*$`, l, 1)
+    if last == undefined {
+        continue
+    }
+    word := text.trim_space(last[0][0].text)
+    begin := starts[i] + last[0][0].begin
+    matches = append(matches, {begin: begin, end: begin + len(word)})
+}

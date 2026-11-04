@@ -1,0 +1,15 @@
+# Stock email and letter phrases. People write some of these too, so it's a warning, not an error.
+extends: existence
+message: "Stock email phrase; say the thing directly, or cut. '%s'"
+level: warning
+ignorecase: true
+tokens:
+  - 'I hope (?:this|the|my|your) (?:email|message|note|letter) finds you well'
+  - 'I hope you(?:[\x27’]re| are) (?:doing )?well'
+  - 'I (?:just )?wanted to reach out'
+  - 'reaching out (?:regarding|about|to)'
+  - at your earliest convenience
+  - truly appreciate
+  - incredibly helpful
+  - 'thank you (?:so much )?for your time and consideration'
+  - do not hesitate to

@@ -1,0 +1,16 @@
+extends: existence
+message: "Claims importance without evidence; show why it matters, or cut. '%s'"
+level: warning
+ignorecase: true
+tokens:
+  - crucial
+  - pivotal
+  - paramount
+  - vital
+  - 'game[- ]changer'
+  - game-changing
+  - groundbreaking
+  - transformative
+  - revolutionary
+  - unprecedented
+  - mission-critical

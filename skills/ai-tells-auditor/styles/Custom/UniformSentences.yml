@@ -1,0 +1,6 @@
+# Spread is the standard deviation of sentence lengths over the mean length.
+extends: metric
+message: "Sentence lengths barely vary (spread %s); vary the rhythm."
+level: suggestion
+formula: sentence_length_sd / (words / sentences)
+condition: "< 0.35 && sentences >= 12"

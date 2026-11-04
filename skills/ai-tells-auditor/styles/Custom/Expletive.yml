@@ -1,0 +1,10 @@
+extends: existence
+message: "Expletive opener; start with the subject. '%s'"
+level: suggestion
+ignorecase: true
+nonword: true
+scope: sentence
+tokens:
+  - '^(?-i:(?=[A-Z]))There (?:is|are|was|were)\b'
+  - '^(?-i:(?=[A-Z]))It is (?:important|essential|worth|clear)\b'
+  - '^(?-i:(?=[A-Z]))It[\x27’]s (?:important|essential|worth)\b'

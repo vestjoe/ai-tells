@@ -1,0 +1,7 @@
+extends: existence
+message: "'X isn't about Y. It's about Z' reframe; state Z. '%s'"
+level: error
+ignorecase: true
+nonword: true
+tokens:
+  - '\b(?:isn[\x27’]t|is not|wasn[\x27’]t|was not)\s+about\b[^.!?\n]{0,80}[.;,]\s*(?:it[\x27’]s|it is|it was)\s+about\b'

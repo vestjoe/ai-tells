@@ -1,0 +1,16 @@
+# Words that are also nouns (leverage, harness, underscore) count only as verbs: after a subject or modal ("we
+# leverage", "must leverage"), or before an object ("leverage the cache"). "embark" counts only before "on";
+# "unlock" only before a figurative object ("unlock new value", not "unlock the door").
+extends: existence
+message: "Inflated verb; use the plain one (use, help, improve, show, start). '%s'"
+level: warning
+ignorecase: true
+nonword: true
+tokens:
+  - '\b(?:delve|delves|delving|leveraging|harnessing|empowers?|empowering|fosters?|fostering|streamlines?)\b'
+  - '\b(?:elevates?|elevating|bolsters?|spearhead|revolutionize|supercharge|unleash|reimagine)\b'
+  - '\bnavigat(?:e|ing)\s+the\b'
+  - '(?<=\b(?:to|we|you|they|I|must|can|will|should|could|would|may|might|and|or|then|which|who|teams|companies|organizations|businesses|enterprises|engineers|developers|users|people)\s)(?:leverages?|leveraged|harness(?:es|ed)?|underscores?|underscored)\b'
+  - '\b(?:leverages?|leveraged|harness(?:es|ed)?|underscores?|underscored)(?=\s+(?:the|a|an|our|your|their|its|this|that|these|those|it|them|existing|new|AI|data)\b)'
+  - '\bembark(?:s|ed|ing)?(?=\s+(?:on|upon)\b)'
+  - '\bunlock(?:s|ed|ing)?(?=\s+(?:new|the\s+(?:potential|power|value)|potential|value|capabilities|possibilities|insights|growth)\b)'

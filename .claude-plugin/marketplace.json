@@ -1,0 +1,14 @@
+{
+  "name": "ai-tells-auditor",
+  "description": "A Claude Code skill that audits prose for AI tells and autopilot writing with a pinned Vale config and a judgment pass.",
+  "owner": {
+    "name": "Joe Vest",
+    "url": "https://github.com/vestjoe"
+  },
+  "plugins": [
+    {
+      "name": "ai-tells-auditor",
+      "source": "./"
+    }
+  ]
+}

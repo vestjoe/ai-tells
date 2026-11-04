@@ -1,0 +1,8 @@
+extends: existence
+message: "Sentence opens on a vague 'This'; name what it refers to. '%s'"
+level: suggestion
+ignorecase: true
+nonword: true
+scope: sentence
+tokens:
+  - '^(?-i:(?=[A-Z]))This (?:means|is why|is an?|is the|makes|gives|allows|ensures)\b'

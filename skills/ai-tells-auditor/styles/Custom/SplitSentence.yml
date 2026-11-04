@@ -1,0 +1,7 @@
+# A line break inside a sentence. Markdown renders it, but the raw file reads as broken sentences.
+# Break lines only after a sentence ends (. ! ? or :), or not at all.
+extends: script
+message: "'%s' ends the line mid-sentence; join it to the next line, or break only after a sentence."
+level: warning
+scope: raw
+script: SplitSentence.tengo

@@ -1,0 +1,14 @@
+extends: existence
+message: "A preamble announcing the structure; start with the content. '%s'"
+level: error
+ignorecase: true
+tokens:
+  - 'let[\x27’]s dive(?: in)?'
+  - 'let[\x27’]s unpack'
+  - 'in this (?:article|post|guide)'
+  - 'below,? we[\x27’]ll'
+  - 'here[\x27’]s a breakdown'
+  - without further ado
+  - 'in today[\x27’]s'
+  - in the world of
+  - when it comes to

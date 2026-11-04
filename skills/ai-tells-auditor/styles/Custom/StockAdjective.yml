@@ -1,0 +1,27 @@
+extends: existence
+message: "Stock adjective; give the specific property, or cut. '%s'"
+level: warning
+ignorecase: true
+tokens:
+  - robust
+  - seamless
+  - seamlessly
+  - comprehensive
+  - cutting-edge
+  - state-of-the-art
+  - holistic
+  - nuanced
+  - dynamic
+  - innovative
+  - meticulous
+  - meticulously
+  - intricate
+  - vibrant
+  - bustling
+  - ever-evolving
+  - ever-changing
+  - world-class
+  - best-in-class
+  - unparalleled
+  - invaluable
+  - indispensable
