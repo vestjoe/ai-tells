@@ -1,5 +1,7 @@
 # ai-tells-auditor
 
+Run `python3 tests/test_tells.py` before every push.
+
 ## Versioning
 
 Installed plugins update only when `version` in `.claude-plugin/plugin.json` changes. Bump it in the same commit as any change under `skills/ai-tells-auditor/`:
