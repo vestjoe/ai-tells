@@ -1,0 +1,466 @@
+{
+  "_about": "Hand-labeled AI tells. Each label is an exact quote that appears once on one line of its file. Categories follow Wikipedia's 'Signs of AI writing' list (WP:AISIGNS). Labels were written before any config was run against the corpus; don't add labels to match what a config catches.",
+  "seen_files": [
+    "evals/files/launch-post.md",
+    "evals/files/README-draft.md",
+    "evals/compare/corpus/tells/landlord-email.md"
+  ],
+  "_seen_files": "Text the rules may have been tuned on: the skill's eval drafts and the landlord email from eval 2. Recall on the other files is the fairer number.",
+  "labels": [
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "Nestled in",
+      "category": "promotional"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "vibrant town",
+      "category": "promotional"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "boasts",
+      "category": "promotional"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "rich cultural heritage",
+      "category": "promotional"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "stands as a testament",
+      "category": "significance"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "played a pivotal role",
+      "category": "significance"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "contributing to the economic growth",
+      "category": "superficial-ing"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "highlighting the town's enduring significance",
+      "category": "superficial-ing"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "Historians have noted",
+      "category": "vague-attribution"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "marked a turning point",
+      "category": "significance"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "Despite its rich history",
+      "category": "challenges-formula"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "remain optimistic about the future",
+      "category": "challenges-formula"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "From its annual harvest festival to its bustling farmers market",
+      "category": "false-range"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "offers something for everyone",
+      "category": "promotional"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "intricate tapestry",
+      "category": "ai-vocabulary"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "Additionally",
+      "category": "transition"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "serves as a vibrant hub",
+      "category": "promotional"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "It's important to note",
+      "category": "editorializing"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "meticulous",
+      "category": "ai-vocabulary"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "underscoring the community's commitment",
+      "category": "superficial-ing"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "In conclusion",
+      "category": "summary-conclusion"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "is not just a small town, but",
+      "category": "negative-parallelism"
+    },
+    {
+      "file": "evals/compare/corpus/tells/town-article.md",
+      "quote": "## Conclusion",
+      "category": "summary-conclusion"
+    },
+    {
+      "file": "evals/compare/corpus/tells/chat-answer.md",
+      "quote": "Certainly!",
+      "category": "chatbot"
+    },
+    {
+      "file": "evals/compare/corpus/tells/chat-answer.md",
+      "quote": "Great question.",
+      "category": "chatbot"
+    },
+    {
+      "file": "evals/compare/corpus/tells/chat-answer.md",
+      "quote": "Let's delve into",
+      "category": "ai-vocabulary"
+    },
+    {
+      "file": "evals/compare/corpus/tells/chat-answer.md",
+      "quote": "As of my last knowledge update",
+      "category": "knowledge-cutoff"
+    },
+    {
+      "file": "evals/compare/corpus/tells/chat-answer.md",
+      "quote": "Here's the thing:",
+      "category": "set-up-reveal"
+    },
+    {
+      "file": "evals/compare/corpus/tells/chat-answer.md",
+      "quote": "Furthermore",
+      "category": "transition"
+    },
+    {
+      "file": "evals/compare/corpus/tells/chat-answer.md",
+      "quote": "— which can slow writes",
+      "category": "em-dash"
+    },
+    {
+      "file": "evals/compare/corpus/tells/chat-answer.md",
+      "quote": "It's worth noting",
+      "category": "editorializing"
+    },
+    {
+      "file": "evals/compare/corpus/tells/chat-answer.md",
+      "quote": "The key takeaway?",
+      "category": "set-up-reveal"
+    },
+    {
+      "file": "evals/compare/corpus/tells/chat-answer.md",
+      "quote": "ensures optimal performance while maintaining data integrity",
+      "category": "superficial-ing"
+    },
+    {
+      "file": "evals/compare/corpus/tells/chat-answer.md",
+      "quote": "I hope this helps!",
+      "category": "chatbot"
+    },
+    {
+      "file": "evals/compare/corpus/tells/chat-answer.md",
+      "quote": "Let me know if you have any other questions.",
+      "category": "chatbot"
+    },
+    {
+      "file": "evals/compare/corpus/tells/pr-description.md",
+      "quote": "robust, scalable",
+      "category": "ai-vocabulary"
+    },
+    {
+      "file": "evals/compare/corpus/tells/pr-description.md",
+      "quote": "seamlessly integrates",
+      "category": "ai-vocabulary"
+    },
+    {
+      "file": "evals/compare/corpus/tells/pr-description.md",
+      "quote": "By leveraging",
+      "category": "ai-vocabulary"
+    },
+    {
+      "file": "evals/compare/corpus/tells/pr-description.md",
+      "quote": "unlock significant performance gains",
+      "category": "promotional"
+    },
+    {
+      "file": "evals/compare/corpus/tells/pr-description.md",
+      "quote": "**Caching layer:**",
+      "category": "inline-header-list"
+    },
+    {
+      "file": "evals/compare/corpus/tells/pr-description.md",
+      "quote": "comprehensive",
+      "category": "ai-vocabulary"
+    },
+    {
+      "file": "evals/compare/corpus/tells/pr-description.md",
+      "quote": "cutting-edge",
+      "category": "promotional"
+    },
+    {
+      "file": "evals/compare/corpus/tells/pr-description.md",
+      "quote": "empowering the team",
+      "category": "superficial-ing"
+    },
+    {
+      "file": "evals/compare/corpus/tells/pr-description.md",
+      "quote": "## Why this matters",
+      "category": "significance"
+    },
+    {
+      "file": "evals/compare/corpus/tells/pr-description.md",
+      "quote": "isn't just a technical metric — it's",
+      "category": "negative-parallelism"
+    },
+    {
+      "file": "evals/compare/corpus/tells/pr-description.md",
+      "quote": "Experts agree",
+      "category": "vague-attribution"
+    },
+    {
+      "file": "evals/compare/corpus/tells/pr-description.md",
+      "quote": "paves the way",
+      "category": "significance"
+    },
+    {
+      "file": "evals/compare/corpus/tells/pr-description.md",
+      "quote": "ever-evolving landscape",
+      "category": "ai-vocabulary"
+    },
+    {
+      "file": "evals/compare/corpus/tells/pr-description.md",
+      "quote": "were thoroughly tested by the team",
+      "category": "passive"
+    },
+    {
+      "file": "evals/compare/corpus/tells/pr-description.md",
+      "quote": "Overall, this is a game-changer",
+      "category": "summary-conclusion"
+    },
+    {
+      "file": "evals/compare/corpus/tells/pr-description.md",
+      "quote": "[Your Name]",
+      "category": "placeholder"
+    },
+    {
+      "file": "evals/compare/corpus/tells/landlord-email.md",
+      "quote": "I hope this email finds you well!",
+      "category": "chatbot"
+    },
+    {
+      "file": "evals/compare/corpus/tells/landlord-email.md",
+      "quote": "I wanted to reach out",
+      "category": "chatbot"
+    },
+    {
+      "file": "evals/compare/corpus/tells/landlord-email.md",
+      "quote": "It's not just a minor drip, but",
+      "category": "negative-parallelism"
+    },
+    {
+      "file": "evals/compare/corpus/tells/landlord-email.md",
+      "quote": "Moreover",
+      "category": "transition"
+    },
+    {
+      "file": "evals/compare/corpus/tells/landlord-email.md",
+      "quote": "increased substantially",
+      "category": "vague-quantity"
+    },
+    {
+      "file": "evals/compare/corpus/tells/landlord-email.md",
+      "quote": "a testament to",
+      "category": "significance"
+    },
+    {
+      "file": "evals/compare/corpus/tells/landlord-email.md",
+      "quote": "I truly appreciate everything you do",
+      "category": "chatbot"
+    },
+    {
+      "file": "evals/compare/corpus/tells/landlord-email.md",
+      "quote": "incredibly helpful",
+      "category": "chatbot"
+    },
+    {
+      "file": "evals/compare/corpus/tells/landlord-email.md",
+      "quote": "at your earliest convenience",
+      "category": "chatbot"
+    },
+    {
+      "file": "evals/compare/corpus/tells/landlord-email.md",
+      "quote": "Ultimately",
+      "category": "summary-conclusion"
+    },
+    {
+      "file": "evals/compare/corpus/tells/landlord-email.md",
+      "quote": "Thank you so much for your time and consideration!",
+      "category": "chatbot"
+    },
+    {
+      "file": "evals/files/launch-post.md",
+      "quote": "In today's fast-paced financial landscape",
+      "category": "promotional"
+    },
+    {
+      "file": "evals/files/launch-post.md",
+      "quote": "we're thrilled to announce",
+      "category": "promotional"
+    },
+    {
+      "file": "evals/files/launch-post.md",
+      "quote": "seamless, robust, and comprehensive",
+      "category": "rule-of-three"
+    },
+    {
+      "file": "evals/files/launch-post.md",
+      "quote": "It's not just about speed, but about trust.",
+      "category": "negative-parallelism"
+    },
+    {
+      "file": "evals/files/launch-post.md",
+      "quote": "Studies show",
+      "category": "vague-attribution"
+    },
+    {
+      "file": "evals/files/launch-post.md",
+      "quote": "Moreover",
+      "category": "transition"
+    },
+    {
+      "file": "evals/files/launch-post.md",
+      "quote": "completely reimagined",
+      "category": "promotional"
+    },
+    {
+      "file": "evals/files/launch-post.md",
+      "quote": "The result?",
+      "category": "set-up-reveal"
+    },
+    {
+      "file": "evals/files/launch-post.md",
+      "quote": "faster, smarter, and more accurate",
+      "category": "rule-of-three"
+    },
+    {
+      "file": "evals/files/launch-post.md",
+      "quote": "a game-changer",
+      "category": "promotional"
+    },
+    {
+      "file": "evals/files/launch-post.md",
+      "quote": "Both are great options depending on your needs.",
+      "category": "false-balance"
+    },
+    {
+      "file": "evals/files/launch-post.md",
+      "quote": "Ultimately",
+      "category": "summary-conclusion"
+    },
+    {
+      "file": "evals/files/launch-post.md",
+      "quote": "is a testament to",
+      "category": "significance"
+    },
+    {
+      "file": "evals/files/launch-post.md",
+      "quote": "commitment to excellence",
+      "category": "promotional"
+    },
+    {
+      "file": "evals/files/launch-post.md",
+      "quote": "Let's embark on this journey together!",
+      "category": "ai-vocabulary"
+    },
+    {
+      "file": "evals/files/README-draft.md",
+      "quote": "powerful, lightweight",
+      "category": "promotional"
+    },
+    {
+      "file": "evals/files/README-draft.md",
+      "quote": "seamlessly formats",
+      "category": "ai-vocabulary"
+    },
+    {
+      "file": "evals/files/README-draft.md",
+      "quote": "Whether you're a seasoned developer or just getting started",
+      "category": "false-range"
+    },
+    {
+      "file": "evals/files/README-draft.md",
+      "quote": "empowers you to leverage",
+      "category": "ai-vocabulary"
+    },
+    {
+      "file": "evals/files/README-draft.md",
+      "quote": "**Blazing fast**",
+      "category": "promotional"
+    },
+    {
+      "file": "evals/files/README-draft.md",
+      "quote": "It's worth noting",
+      "category": "editorializing"
+    },
+    {
+      "file": "evals/files/README-draft.md",
+      "quote": "Simply run",
+      "category": "editorializing"
+    },
+    {
+      "file": "evals/files/README-draft.md",
+      "quote": "Let's dive into",
+      "category": "chatbot"
+    },
+    {
+      "file": "evals/files/README-draft.md",
+      "quote": "a great fit",
+      "category": "promotional"
+    },
+    {
+      "file": "evals/files/README-draft.md",
+      "quote": "We welcome contributions of all kinds!",
+      "category": "chatbot"
+    },
+    {
+      "file": "evals/files/README-draft.md",
+      "quote": "every contribution is valued",
+      "category": "chatbot"
+    },
+    {
+      "file": "evals/files/README-draft.md",
+      "quote": "In summary",
+      "category": "summary-conclusion"
+    },
+    {
+      "file": "evals/files/README-draft.md",
+      "quote": "is a game-changer",
+      "category": "promotional"
+    },
+    {
+      "file": "evals/files/README-draft.md",
+      "quote": "Happy formatting!",
+      "category": "chatbot"
+    }
+  ]
+}

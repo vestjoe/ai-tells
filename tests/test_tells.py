@@ -336,6 +336,17 @@ def test_version_is_bumped_when_the_skill_changes():
         'skills/ changed since {0} but plugin.json is still {1}; bump the version'.format(tag, version))
 
 
+def test_comparison_labels_resolve():
+    # Each label in the Vale comparison corpus must quote text that appears exactly once in its file.
+    sys.path.insert(0, os.path.join(HERE, '..', 'evals', 'compare'))
+    import compare_linters
+    try:
+        labels = compare_linters.load_labels(os.path.join(HERE, '..', 'evals', 'compare', 'corpus', 'labels.json'))
+    except SystemExit as exc:
+        raise AssertionError(str(exc))
+    assert len(labels) >= 90, len(labels)
+
+
 def main():
     tests = [v for k, v in sorted(globals().items()) if k.startswith('test_') and callable(v)]
     failed = 0

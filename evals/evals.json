@@ -14,9 +14,9 @@
         "Flags the Dana Ortiz / Acme Corp quote as needing a source or sign-off",
         "Flags the pricing section as false balance (two options, no recommendation)",
         "Flags the repeated bold-label formula that restates the headings",
-        "Each wording finding cites a line number, so the writer can find it",
-        "Overlapping hits on the same span are merged into one entry, not listed twice",
-        "Lists at least one hit it judged fine in context, with a reason (shows the hits were weighed, not just echoed)",
+        "Each finding quotes the text or gives its location, so the writer can find it",
+        "No problem is listed twice",
+        "Doesn't present fine wording as a problem: everything it tells the writer to change is worth changing",
         "Writes no rewrite of the post and invents no replacement facts (no made-up statistic, quote, or price)",
         "Names the facts the writer must supply before the post can ship (source for 73.6%, quote sign-off, plan details)"
       ]
