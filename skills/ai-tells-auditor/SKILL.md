@@ -78,6 +78,8 @@ For pasted text that's short enough to send as-is (an email, a message, a bio, a
 
 ## 6. Fix, when asked
 
+If the writer has the notes the draft came from, edit against them instead: see section 7.
+
 <!-- vale off -->
 - Rewrite the sentence, not the word. Swapping "leverage" for "utilize" trades one tell for another.
 - Keep the meaning and the facts. Never add a number, name, source, or claim to make a sentence concrete. If a fix needs a fact you don't have, leave a question for the writer.
@@ -94,6 +96,10 @@ A robust estimator.
 ```
 
 `<!-- vale off -->` and `<!-- vale on -->` turn every rule off. Add these only when the user asks, since they change the document.
+
+## 7. Edit against the writer's notes
+
+When the writer gives you the notes, outline, or brief the draft came from, and asks you to edit or tighten the draft, follow `references/edit-with-notes.md`. The draft must say what the notes say. The edit cuts repeats, announcers, and summaries, keeps every note point and every example, and doesn't add anything. `scripts/check_edit.py` confirms that no sentence is new and no section grew. Sentences that aren't in the notes stay, and you list them for the writer to decide.
 
 ## What's in the config
 

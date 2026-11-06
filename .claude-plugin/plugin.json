@@ -1,6 +1,6 @@
 {
   "name": "ai-tells-auditor",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Audits prose for AI tells and autopilot writing: stock phrases, inflated words, set-up-and-reveal framing, filler, hedges, em dashes, uniform rhythm, and content problems a linter can't see.",
   "author": {
     "name": "Joe Vest",

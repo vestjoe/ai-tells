@@ -322,6 +322,34 @@ def test_audit_script_reports_a_missing_path():
     assert out.returncode == 2 and 'No such file' in out.stderr, (out.returncode, out.stderr)
 
 
+CHECK_EDIT = os.path.join(HERE, '..', 'skills', 'ai-tells-auditor', 'scripts', 'check_edit.py')
+
+
+def check_edit(orig, edited):
+    with tempfile.TemporaryDirectory() as d:
+        paths = [os.path.join(d, n) for n in ('orig.md', 'edited.md')]
+        for p, text in zip(paths, (orig, edited)):
+            with open(p, 'w', encoding='utf-8') as fh:
+                fh.write(text)
+        return subprocess.run([sys.executable, CHECK_EDIT] + paths, capture_output=True, text=True)
+
+
+def test_check_edit_sorts_cut_reworded_and_new():
+    orig = ('# Plan\n\nIn this section we cover the plan. The build runs nightly on two hosts. '
+            'It leverages a robust cache. In short, the build runs nightly.\n\n```\nnot prose.\n```\n')
+    edited = ('# Plan\n\nThe build runs nightly on two hosts. It uses a cache. '
+              'Costs fell [by how much].\n\n```\nnot prose.\n```\n')
+    out = check_edit(orig, edited)
+    assert out.returncode == 0, out.stdout
+    assert 'kept 1, cut 2, reworded 1, NEW 1' in out.stdout, out.stdout
+    assert 'NEW:      Costs fell [by how much].' in out.stdout, out.stdout
+
+
+def test_check_edit_flags_a_section_that_grew():
+    out = check_edit('# A\n\nShort.\n\n# B\n\nAlso short.\n', '# A\n\nShort.\n\n# B\n\nAlso short, and now it says more.\n')
+    assert out.returncode == 1 and 'GREW:     section "B" 2 -> 7 words' in out.stdout, out.stdout
+
+
 def test_version_is_bumped_when_the_skill_changes():
     # Installed plugins update only when plugin.json's version changes. Skipped outside git or before the first tag.
     root = os.path.join(HERE, '..')
