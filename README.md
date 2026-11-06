@@ -1,8 +1,13 @@
 # ai-tells-auditor
 
-A Claude Code skill for clearer prose. It flags wordy, vague, and padded writing, and the patterns of writing on autopilot, by a person or a model. These include stock phrases, inflated words, set-up-and-reveal framing, editorial asides, hedges, em dashes, and uniform sentence rhythm.
+A Claude Code plugin with two skills for clearer prose:
 
-The skill works in two passes. [Vale](https://vale.sh) checks the wording with a pinned config. Then Claude checks what a linter can't: invented specifics, unsourced claims about people, false balance, and repeated section formulas. You get one ranked list of findings with a fix for each. Claude edits the document only when you ask.
+- **`/ai-tells-auditor:ai-tells-auditor`** audits a draft and reports what to fix.
+- **`/ai-tells-auditor:ai-tells-editor`** edits a draft against the notes, outline, or brief it came from. It cuts repeats, announcers, and summaries and keeps every point in the notes. It doesn't add anything, and it lists every sentence that isn't in the notes.
+
+The auditor flags wordy, vague, and padded writing, and the patterns of writing on autopilot, by a person or a model. These include stock phrases, inflated words, set-up-and-reveal framing, editorial asides, hedges, em dashes, and uniform sentence rhythm.
+
+The auditor works in two passes. [Vale](https://vale.sh) checks the wording with a pinned config. Then Claude checks what a linter can't: invented specifics, unsourced claims about people, false balance, and repeated section formulas. You get one ranked list of findings with a fix for each. Claude edits the document only when you ask.
 
 ## Install
 
@@ -19,22 +24,32 @@ brew install vale    # or see https://vale.sh/docs/install
 /plugin install ai-tells-auditor@ai-tells-auditor
 ```
 
-**By hand:** copy the skill folder into your skills directory.
+**By hand:** copy the skill folders into your skills directory.
 
 ```bash
 git clone https://github.com/vestjoe/ai-tells-auditor.git
-cp -R ai-tells-auditor/skills/ai-tells-auditor ~/.claude/skills/
+cp -R ai-tells-auditor/skills/ai-tells-auditor ai-tells-auditor/skills/ai-tells-editor ~/.claude/skills/
 ```
 
 On first use the skill runs `vale sync` to fetch the third-party packs, so it needs network access once.
 
 ## Use
 
-Ask Claude in your own words:
+Run a skill by name, with the files after it:
+
+```
+/ai-tells-auditor:ai-tells-auditor docs/launch-post.md
+/ai-tells-auditor:ai-tells-editor drafts/chapter4.md notes/chapter4-outline.md
+```
+
+The editor saves the original as `<name>.orig.md`, edits the draft in place, and runs `scripts/check_edit.py` to confirm that no sentence is new and no section grew.
+
+Or ask Claude in your own words:
 
 - "Check `docs/launch-post.md` for AI tells."
 - "Does this email sound like ChatGPT wrote it?" followed by the pasted text.
 - "Tighten this README and fix what you find."
+- "Edit `chapter4.md` against my outline in `chapter4-outline.md`."
 
 Or run the linter pass yourself. From a clone of this repo:
 
@@ -47,9 +62,11 @@ pbpaste | skills/ai-tells-auditor/scripts/audit.sh             # the clipboard (
 
 `audit.sh` exits 1 when Vale reports any `error`, so it works as a CI gate.
 
-## What's in the skill
+## What's in the skills
 
-- `SKILL.md`: the steps Claude follows.
+In `skills/ai-tells-auditor/`:
+
+- `SKILL.md`: the audit steps Claude follows.
 - `.vale.ini`: turns on `Custom` and five packs, each pinned to a release:
   - [vale-ai-tells](https://github.com/tbhb/vale-ai-tells): AI-writing patterns.
   - [proselint](https://github.com/vale-cli/proselint): clichés and redundancy.
@@ -60,6 +77,11 @@ pbpaste | skills/ai-tells-auditor/scripts/audit.sh             # the clipboard (
 - `styles/Custom/`: our rules, one YAML file each. Alerts from them start with `Custom.`. `vale sync` downloads the other folders in `styles/`, and git ignores them.
 - `references/review-prompt.md`: the checklist for the judgment pass. It also works as a prompt for a person or another model.
 - `scripts/audit.sh`: runs Vale with this config, fetches the packs if they're missing, and prints one line per finding.
+
+In `skills/ai-tells-editor/`:
+
+- `SKILL.md`: the edit-against-notes steps.
+- `scripts/check_edit.py`: compares the original and the edit and prints kept, cut, reworded, and new sentences, plus any section that grew.
 
 ## How to read the results
 

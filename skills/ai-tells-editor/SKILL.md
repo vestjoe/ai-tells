@@ -1,4 +1,14 @@
+---
+name: ai-tells-editor
+description: Edits a draft against the notes, outline, or brief it was written from. Cuts repeats, announcers, and summaries; keeps every point and example in the notes; adds no words, facts, or sentences; checks the edit with a script; and lists every sentence that isn't in the notes so the writer decides. Use it whenever the user has a draft plus the notes, outline, bullet points, or brief behind it and wants the draft edited, tightened, trimmed, or cut down against them, wants to check that every note point survived, or wants to find what a model or contractor added that isn't in the notes, even if they don't name this skill. For a draft with no notes, use ai-tells-auditor instead.
+argument-hint: "<draft> <notes>"
+---
+
 # Edit a draft against the writer's notes
+
+Arguments given: `$ARGUMENTS`
+
+You need two files: the draft and the notes it came from. Take them from the arguments or the user's request, draft first. If either is missing, ask for it. Don't start without the notes: an edit with no notes to check against is an audit, which is the ai-tells-auditor skill's job.
 
 The writer's notes are the source of truth. The draft came from them, and the edit makes the draft say what the notes say, once each, in the order the notes put it. The edit removes text. It never adds a fact.
 
@@ -40,6 +50,8 @@ Write `<name>.claims.md`: one line per claim in the draft, grouped under the dra
 ```bash
 python3 <skill-dir>/scripts/check_edit.py <name>.orig.md <name>.md
 ```
+
+`<skill-dir>` is the folder this file is in.
 
 It must report `NEW 0` and no `GREW` lines. If it finds a new sentence, you wrote something. Undo it. Then give the writer:
 

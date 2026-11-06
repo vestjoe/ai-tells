@@ -322,7 +322,7 @@ def test_audit_script_reports_a_missing_path():
     assert out.returncode == 2 and 'No such file' in out.stderr, (out.returncode, out.stderr)
 
 
-CHECK_EDIT = os.path.join(HERE, '..', 'skills', 'ai-tells-auditor', 'scripts', 'check_edit.py')
+CHECK_EDIT = os.path.join(HERE, '..', 'skills', 'ai-tells-editor', 'scripts', 'check_edit.py')
 
 
 def check_edit(orig, edited):

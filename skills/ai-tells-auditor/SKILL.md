@@ -1,6 +1,7 @@
 ---
 name: ai-tells-auditor
-description: Audits prose for AI tells and autopilot writing (stock phrases, inflated words, set-up-and-reveal framing, filler openers and closers, hedges, em dashes, uniform rhythm), plus the content problems a linter can't see, such as invented specifics, unsourced claims, and false balance. Runs a pinned Vale config, then a judgment pass, and reports ranked findings with fixes. Use it whenever the user wants a draft, README, blog post, email, doc, PR description, or pasted text checked, tightened, edited, or "de-AI'd", asks whether something "sounds like ChatGPT/AI", "reads robotic", or "is too wordy", or mentions Vale, prose linting, or writing quality, even if they don't name this skill.
+description: Audits prose for AI tells and autopilot writing (stock phrases, inflated words, set-up-and-reveal framing, filler openers and closers, hedges, em dashes, uniform rhythm), plus the content problems a linter can't see, such as invented specifics, unsourced claims, and false balance. Runs a pinned Vale config, then a judgment pass, and reports ranked findings with fixes, then applies the fixes the user picks. Use it whenever the user wants a draft, README, chapter, blog post, email, doc, PR description, or pasted text checked, reviewed, or "de-AI'd", asks whether something "sounds like ChatGPT/AI", "reads robotic", or "is too wordy", or mentions Vale or prose linting, even if they don't name this skill and even for short pasted text. When the user has the notes, outline, or brief a draft came from and wants the draft edited against them, use ai-tells-editor instead.
+argument-hint: "<file, folder, or pasted text>"
 ---
 
 # AI tells auditor
@@ -10,7 +11,7 @@ Find the places where a document reads as written on autopilot, by a person or a
 1. **Vale** checks wording: stock phrases, inflated verbs and nouns, filler, hedges, passives, em dashes, sentence rhythm. It's fast, repeatable, and gives exact line and column numbers.
 2. **A judgment pass** checks what Vale can't: invented facts, claims about people with no source, false balance, repeated section formulas, generic text. The checklist is in `references/review-prompt.md`.
 
-Report first. Edit the document only when the user asks for fixes, in this request or after seeing the report. A writer often wants to choose which findings to act on, and many hits are fine in context.
+Report first. If the user typed a file, folder, or text after the command, audit that; if they typed nothing, ask what to audit. Edit the document only when the user asks for fixes, in this request or after seeing the report. A writer often wants to choose which findings to act on, and many hits are fine in context.
 
 ## 1. Get the text
 
@@ -78,7 +79,7 @@ For pasted text that's short enough to send as-is (an email, a message, a bio, a
 
 ## 6. Fix, when asked
 
-If the writer has the notes the draft came from, edit against them instead: see section 7.
+If the writer has the notes, outline, or brief the draft came from and wants it edited against them, that's the ai-tells-editor skill's job (`/ai-tells-auditor:ai-tells-editor`). Use it instead.
 
 <!-- vale off -->
 - Rewrite the sentence, not the word. Swapping "leverage" for "utilize" trades one tell for another.
@@ -96,10 +97,6 @@ A robust estimator.
 ```
 
 `<!-- vale off -->` and `<!-- vale on -->` turn every rule off. Add these only when the user asks, since they change the document.
-
-## 7. Edit against the writer's notes
-
-When the writer gives you the notes, outline, or brief the draft came from, and asks you to edit or tighten the draft, follow `references/edit-with-notes.md`. The draft must say what the notes say. The edit cuts repeats, announcers, and summaries, keeps every note point and every example, and doesn't add anything. `scripts/check_edit.py` confirms that no sentence is new and no section grew. Sentences that aren't in the notes stay, and you list them for the writer to decide.
 
 ## What's in the config
 
