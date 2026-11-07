@@ -442,6 +442,31 @@ def test_check_voice_matches_curly_apostrophes():
     assert check_voice(profile, sample).returncode == 1
 
 
+WRITER = os.path.join(HERE, '..', 'skills', 'ai-tells-writer')
+PROFILE_SECTIONS = ['Summary', 'Numbers', 'Habits to keep', 'Habits to avoid', 'Person']
+
+
+def test_plain_voice_has_the_profile_sections_in_order():
+    with open(os.path.join(WRITER, 'voices', 'plain.md'), encoding='utf-8') as fh:
+        heads = [l[3:].strip() for l in fh if l.startswith('## ')]
+    assert heads == PROFILE_SECTIONS, heads
+
+
+def test_plain_voice_copies_nothing_from_the_samples():
+    out = subprocess.run([sys.executable, CHECK_VOICE, os.path.join(WRITER, 'voices', 'plain.md'),
+                          os.path.join(HERE, 'sample_clean.md'), os.path.join(HERE, 'sample_tells.md')],
+                         capture_output=True, text=True)
+    assert out.returncode == 0, out.stdout
+
+
+def test_writer_prose_passes_the_auditor():
+    for rel in ('voices/plain.md', 'references/build-voice.md'):
+        out = subprocess.run([AUDIT, '--min=warning', os.path.join(WRITER, rel)], capture_output=True, text=True,
+                             env=dict(os.environ, VALE=VALE or ''))
+        findings = [l for l in out.stdout.splitlines() if l[:1].isdigit()]   # finding lines start LINE:START-END
+        assert out.returncode == 0 and not findings, (rel, findings)
+
+
 def main():
     tests = [v for k, v in sorted(globals().items()) if k.startswith('test_') and callable(v)]
     failed = 0
