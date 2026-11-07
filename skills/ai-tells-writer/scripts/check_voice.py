@@ -6,7 +6,7 @@
 Prints each run of N or more words (default 8) that appears in both the
 profile and a sample, as COPIED: "<run>" (<sample>), then TOTAL: <count>.
 Case, punctuation, and curly versus straight apostrophes are ignored.
-Fenced code in the profile is skipped.
+Fenced code is checked too.
 
 Exit codes: 0 nothing copied, 1 copied runs found, 2 bad arguments or unreadable file.
 """
@@ -17,16 +17,14 @@ import sys
 TOKEN = re.compile(r"[a-z0-9']+")
 
 
-def words(text, skip_code=False):
+def words(text):
     text = text.replace('’', "'").replace('‘', "'").lower()
-    if skip_code:
-        text = re.sub(r'(?ms)^\s*(```|~~~).*?^\s*\1[^\n]*$', ' ', text)
     return [w.strip("'") for w in TOKEN.findall(text) if w.strip("'")]
 
 
 def shared_runs(profile, sample, n=8):
     """Maximal runs of n or more consecutive words found in both texts, in profile order."""
-    p = words(profile, skip_code=True)
+    p = words(profile)
     s = words(sample)
     windows = {tuple(s[i:i + n]) for i in range(len(s) - n + 1)}
     runs, i = [], 0

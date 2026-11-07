@@ -15,12 +15,12 @@ textutil -convert txt -output <scratch>/sample1.txt "<sample1.docx>"   # macOS
 pandoc -t plain -o <scratch>/sample2.txt "<sample2.docx>"              # anywhere
 ```
 
-Markdown and plain text files can be used as they are. Drop the parts that aren't the writer's prose: tables of contents, indexes, copyright pages, and long quotations from other people.
+Markdown and plain text files can be used as they are. Drop the parts that aren't the writer's prose: tables of contents, indexes, copyright pages, code listings, tables, and long quotations from other people.
 
 ## 2. Measure
 
 ```bash
-python3 ${CLAUDE_SKILL_DIR}/scripts/voice_stats.py <scratch>/*.txt
+${CLAUDE_SKILL_DIR}/scripts/voice_stats.py <scratch>/*.txt
 ```
 
 Copy the numbers into the profile's `Numbers` section and round them to a range the writer can aim for. A median sentence of 17.4 words becomes a target of 15 to 19 words.
@@ -50,7 +50,7 @@ Leave person (I, we, you) out of the habits. The writer chooses it per piece, an
 ## 5. Check for copying
 
 ```bash
-python3 ${CLAUDE_SKILL_DIR}/scripts/check_voice.py <profile> <scratch>/*.txt
+${CLAUDE_SKILL_DIR}/scripts/check_voice.py <profile> <scratch>/*.txt
 ```
 
 It must print `TOTAL: 0`. If it finds a copied run, rewrite that line of the profile and run it again.

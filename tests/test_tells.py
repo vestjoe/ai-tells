@@ -378,9 +378,9 @@ def test_comparison_labels_resolve():
 VOICE_STATS = os.path.join(HERE, '..', 'skills', 'ai-tells-writer', 'scripts', 'voice_stats.py')
 
 
-def voice_stats(text, *flags):
+def voice_stats(text, *flags, name='sample.md'):
     with tempfile.TemporaryDirectory() as d:
-        path = os.path.join(d, 'sample.md')
+        path = os.path.join(d, name)
         with open(path, 'w', encoding='utf-8') as fh:
             fh.write(text)
         return subprocess.run([sys.executable, VOICE_STATS] + list(flags) + [path], capture_output=True, text=True)
@@ -491,6 +491,51 @@ def test_writer_points_at_its_own_files():
     assert fields['allowed-tools'] == 'Bash(${CLAUDE_SKILL_DIR}/scripts/*)', fields
     assert '${CLAUDE_SKILL_DIR}/references/build-voice.md' in text
     assert '~/.claude/voices/' in text
+
+
+def test_voice_stats_reads_a_word_export():
+    # textutil output: one paragraph per line, tab-bullet items, headings and commands as bare lines.
+    text = ('Chapter 1\nPlanning the Engagement\nWe start every test with a plan. The plan names the goal.\n'
+            '\t\u2022\tRead the scope document\n\t\u2022\tConfirm the contacts\n'
+            'nmap -sV -p 1-1000 10.0.0.0/24 -oA scan\n'
+            'The team called this \u201cliving off the land.\u201d It means using what is already there.\n')
+    s = json.loads(voice_stats(text, '--json').stdout)
+    assert s['sentences'] == 6, s            # 2 + 2 list items + 2; headings and the command line skipped
+    assert s['paragraph_median'] == 2, s
+    assert s['list_item_share'] == 0.5, s
+
+
+def test_voice_stats_reads_each_line_of_a_txt_file_as_a_paragraph():
+    # Real textutil exports mix blank lines with paragraphs on adjacent lines.
+    text = ('Heading\n\nFirst paragraph has one sentence.\nSecond paragraph has one sentence.\n\n'
+            'Third paragraph. It has two sentences.\n')
+    s = json.loads(voice_stats(text, '--json', name='book.txt').stdout)
+    assert s['paragraph_median'] == 1, s
+    s = json.loads(voice_stats(text, '--json', name='notes.md').stdout)
+    assert s['paragraph_median'] == 2, s     # Markdown: blank lines separate paragraphs
+
+
+def test_voice_stats_does_not_count_possessives_as_contractions():
+    s = json.loads(voice_stats('The client\u2019s scope and the tester\u2019s plan. It\u2019s ready.\n', '--json').stdout)
+    assert s['contractions_per_100_words'] == 11.11, s   # it's only: 1 in 9 words
+
+
+def test_voice_stats_splits_and_finds_questions_inside_curly_quotes():
+    s = json.loads(voice_stats('\u201cIs it ready?\u201d she asked. \u201cWhy?\u201d\n', '--json').stdout)
+    assert s['sentences'] == 3 and s['question_share'] == 0.67, s
+
+
+def test_check_voice_also_checks_fenced_text():
+    sample = 'We always write the rollback steps before the change window opens and test them.\n'
+    profile = '```text\nWe always write the rollback steps before the change window opens and test them.\n```\n'
+    assert check_voice(profile, sample).returncode == 1
+
+
+def test_build_steps_run_scripts_the_way_allowed_tools_approves():
+    with open(os.path.join(WRITER, 'references', 'build-voice.md'), encoding='utf-8') as fh:
+        text = fh.read()
+    assert 'python3 ${CLAUDE_SKILL_DIR}' not in text
+    assert '${CLAUDE_SKILL_DIR}/scripts/voice_stats.py' in text and '${CLAUDE_SKILL_DIR}/scripts/check_voice.py' in text
 
 
 def main():

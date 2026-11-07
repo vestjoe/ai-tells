@@ -12,8 +12,10 @@ Reads every file as one sample and prints:
   list_item_share              list items as a share of all blocks (0-1)
   person_per_1000_words        I, we, and you, per 1,000 words
 
-Front matter and fenced code are skipped. Each list item counts as one block
-and one sentence.
+Front matter, fenced code, and short lines with no end punctuation (headings,
+commands) are skipped. Each list item counts as one block and one sentence.
+In a .md file, blank lines separate paragraphs. In any other file, such as a
+.txt export of a .docx, each line is one paragraph.
 
 Exit codes: 0 done, 2 bad arguments or unreadable file.
 """
@@ -23,10 +25,13 @@ import re
 import statistics
 import sys
 
-LIST_ITEM = re.compile(r'\s*([-*+]|\d+[.)])\s+')
-SENTENCE_END = re.compile(r'(?<=[.?!])["\')\]]*\s+')
+LIST_ITEM = re.compile(r'\s*([-*+•◦▪–]|\d+[.)])\s+')
+CLOSERS = '"\')]”»'
+SENTENCE_END = re.compile(r'(?<=[.?!])[' + re.escape(CLOSERS) + r']*\s+')
 WORD = re.compile(r"[A-Za-z0-9]+(?:'[A-Za-z]+)?")
-CONTRACTION = re.compile(r"\b\w+'(s|t|re|ve|ll|d|m)\b", re.I)
+# 's is a possessive unless the word before it is one of these.
+CONTRACTION = re.compile(r"\b(\w+'(t|re|ve|ll|d|m)|(it|that|what|there|here|let|he|she|who|where|how)'s)\b", re.I)
+HEADING_WORDS = 12   # a short line with no end punctuation is a heading, caption, or command, not prose
 PERSON = {
     'i': {'i', "i'm", "i've", "i'll", "i'd", 'me', 'my', 'mine'},
     'we': {'we', "we're", "we've", "we'll", "we'd", 'us', 'our', 'ours'},
@@ -34,17 +39,25 @@ PERSON = {
 }
 
 
-def blocks(text):
-    """(kind, text) for each paragraph or list item, skipping front matter and fenced code."""
-    lines = text.replace('’', "'").replace('‘', "'").splitlines()
+def blocks(text, line_per_para=False):
+    """(kind, text) for each paragraph or list item in one file.
+
+    Skips front matter, fenced code, and short lines with no end punctuation
+    (headings, captions, commands). With line_per_para, or in a file with no
+    blank lines, each line is one paragraph, as in a textutil export of a .docx.
+    """
+    lines = text.lstrip('﻿').replace('’', "'").replace('‘', "'").splitlines()
     if lines and lines[0].strip() in ('---', '+++'):
         end = next((i for i in range(1, len(lines)) if lines[i].strip() == lines[0].strip()), 0)
         lines = lines[end + 1:]
+    line_per_para = line_per_para or (len(lines) > 1 and all(l.strip() for l in lines))
     out, para, fence = [], [], None
 
     def flush():
         if para:
-            out.append(('para', ' '.join(para)))
+            body = ' '.join(para)
+            if len(body.split()) > HEADING_WORDS or body.rstrip()[-1:] in '.?!:' + CLOSERS:
+                out.append(('para', body))
             para.clear()
 
     for line in lines:
@@ -66,6 +79,8 @@ def blocks(text):
             out.append(('item', line[item.end():].strip()))
             continue
         para.append(line.strip())
+        if line_per_para:
+            flush()
     flush()
     return out
 
@@ -81,8 +96,9 @@ def percentile(values, p):
     return values[min(len(values) - 1, int(round(p * (len(values) - 1))))]
 
 
-def stats(text):
-    bl = blocks(text)
+def stats(*files):
+    """Numbers for one or more files, each a (text, line_per_para) pair split into blocks on its own."""
+    bl = [b for text, line_mode in files for b in blocks(text, line_mode)]
     sents, per_para = [], []
     for kind, body in bl:
         ss = [body] if kind == 'item' else sentences(body)
@@ -99,7 +115,7 @@ def stats(text):
         'sentence_median': round(statistics.median(lengths), 2) if lengths else 0,
         'sentence_p90': percentile(lengths, 0.9),
         'paragraph_median': round(statistics.median(per_para), 2) if per_para else 0,
-        'question_share': round(sum(s.rstrip('"\')]').endswith('?') for s in sents) / len(sents), 2) if sents else 0,
+        'question_share': round(sum(s.rstrip(CLOSERS).endswith('?') for s in sents) / len(sents), 2) if sents else 0,
         'contractions_per_100_words': per(sum(len(CONTRACTION.findall(s)) for s in sents), 100),
         'list_item_share': round(sum(k == 'item' for k, _ in bl) / len(bl), 2) if bl else 0,
         'person_per_1000_words': {k: per(sum(w in forms for w in words), 1000) for k, forms in PERSON.items()},
@@ -116,11 +132,11 @@ def main(argv):
     for p in paths:
         try:
             with open(p, encoding='utf-8') as fh:
-                texts.append(fh.read())
+                texts.append((fh.read(), not p.lower().endswith(('.md', '.markdown'))))
         except OSError as exc:
             print(exc, file=sys.stderr)
             return 2
-    result = stats('\n\n'.join(texts))
+    result = stats(*texts)
     if as_json:
         print(json.dumps(result, indent=2))
     else:
