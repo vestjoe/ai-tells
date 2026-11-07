@@ -467,6 +467,32 @@ def test_writer_prose_passes_the_auditor():
         assert out.returncode == 0 and not findings, (rel, findings)
 
 
+SKILLS = os.path.join(HERE, '..', 'skills')
+
+
+def frontmatter(path):
+    with open(path, encoding='utf-8') as fh:
+        text = fh.read()
+    head = text.split('---', 2)[1]
+    fields = dict(l.split(':', 1) for l in head.strip().splitlines() if ':' in l)
+    return {k.strip(): v.strip() for k, v in fields.items()}, text
+
+
+def test_every_skill_fits_claude_code_limits():
+    for name in os.listdir(SKILLS):
+        fields, text = frontmatter(os.path.join(SKILLS, name, 'SKILL.md'))
+        assert fields['name'] == name, name
+        assert len(fields['description']) < 1536, (name, len(fields['description']))
+        assert len(text.splitlines()) < 500, name
+
+
+def test_writer_points_at_its_own_files():
+    fields, text = frontmatter(os.path.join(WRITER, 'SKILL.md'))
+    assert fields['allowed-tools'] == 'Bash(${CLAUDE_SKILL_DIR}/scripts/*)', fields
+    assert '${CLAUDE_SKILL_DIR}/references/build-voice.md' in text
+    assert '~/.claude/voices/' in text
+
+
 def main():
     tests = [v for k, v in sorted(globals().items()) if k.startswith('test_') and callable(v)]
     failed = 0
