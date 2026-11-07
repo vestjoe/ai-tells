@@ -375,6 +375,41 @@ def test_comparison_labels_resolve():
     assert len(labels) >= 90, len(labels)
 
 
+VOICE_STATS = os.path.join(HERE, '..', 'skills', 'ai-tells-writer', 'scripts', 'voice_stats.py')
+
+
+def voice_stats(text, *flags):
+    with tempfile.TemporaryDirectory() as d:
+        path = os.path.join(d, 'sample.md')
+        with open(path, 'w', encoding='utf-8') as fh:
+            fh.write(text)
+        return subprocess.run([sys.executable, VOICE_STATS] + list(flags) + [path], capture_output=True, text=True)
+
+
+def test_voice_stats_counts_sentences_and_skips_code():
+    text = ('# Setup\n\nWe build it nightly. Don\u2019t skip the check. Is it ready?\n\n'
+            '```\nrm -rf build. make all. echo done.\n```\n\n- one item\n- two items\n')
+    out = voice_stats(text, '--json')
+    assert out.returncode == 0, out.stderr
+    s = json.loads(out.stdout)
+    assert s['sentences'] == 5, s            # three prose sentences plus two list items; code skipped
+    assert s['question_share'] == 0.2, s
+    assert s['contractions_per_100_words'] > 0, s   # curly apostrophe counts
+    assert s['person_per_1000_words']['we'] > 0, s
+
+
+def test_voice_stats_handles_an_empty_file():
+    out = voice_stats('', '--json')
+    assert out.returncode == 0, out.stderr
+    assert json.loads(out.stdout)['words'] == 0
+
+
+def test_voice_stats_reports_a_missing_file():
+    out = subprocess.run([sys.executable, VOICE_STATS, os.path.join(HERE, 'no-such-file.md')],
+                         capture_output=True, text=True)
+    assert out.returncode == 2, out.returncode
+
+
 def main():
     tests = [v for k, v in sorted(globals().items()) if k.startswith('test_') and callable(v)]
     failed = 0
