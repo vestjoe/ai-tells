@@ -410,6 +410,38 @@ def test_voice_stats_reports_a_missing_file():
     assert out.returncode == 2, out.returncode
 
 
+CHECK_VOICE = os.path.join(HERE, '..', 'skills', 'ai-tells-writer', 'scripts', 'check_voice.py')
+
+
+def check_voice(profile, sample, *flags):
+    with tempfile.TemporaryDirectory() as d:
+        paths = [os.path.join(d, n) for n in ('profile.md', 'sample.md')]
+        for p, text in zip(paths, (profile, sample)):
+            with open(p, 'w', encoding='utf-8') as fh:
+                fh.write(text)
+        return subprocess.run([sys.executable, CHECK_VOICE] + list(flags) + paths, capture_output=True, text=True)
+
+
+def test_check_voice_finds_a_copied_run_despite_case_and_punctuation():
+    sample = 'Always write the rollback steps before the change window opens, and test them twice.\n'
+    profile = '# Habits\n\nExample: always write the rollback steps, before the change window opens.\n'
+    out = check_voice(profile, sample)
+    assert out.returncode == 1, out.stdout
+    assert 'COPIED: "always write the rollback steps before the change window opens"' in out.stdout, out.stdout
+    assert out.stdout.rstrip().endswith('TOTAL: 1'), out.stdout
+
+
+def test_check_voice_passes_short_shared_phrases():
+    out = check_voice('Write the rollback steps first.\n', 'Always write the rollback steps before the window.\n')
+    assert out.returncode == 0 and 'TOTAL: 0' in out.stdout, out.stdout
+
+
+def test_check_voice_matches_curly_apostrophes():
+    sample = 'Don\u2019t start the test until the team has signed the rules of the exercise.\n'
+    profile = "Don't start the test until the team has signed the rules.\n"
+    assert check_voice(profile, sample).returncode == 1
+
+
 def main():
     tests = [v for k, v in sorted(globals().items()) if k.startswith('test_') and callable(v)]
     failed = 0
