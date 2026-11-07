@@ -1,6 +1,6 @@
 {
   "name": "ai-tells-auditor",
-  "description": "A Claude Code skill that audits prose for AI tells and autopilot writing with a pinned Vale config and a judgment pass.",
+  "description": "A Claude Code plugin with three skills for clearer prose: a writer that drafts from notes in a chosen voice, an auditor for AI tells and autopilot writing, and an editor that cuts a draft against its notes.",
   "owner": {
     "name": "Joe Vest",
     "url": "https://github.com/vestjoe"
