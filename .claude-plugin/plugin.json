@@ -1,6 +1,6 @@
 {
   "name": "ai-tells-auditor",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Two skills for clearer prose. ai-tells-auditor flags AI tells and autopilot writing: stock phrases, inflated words, filler, hedges, em dashes, uniform rhythm, and content problems a linter can't see. ai-tells-editor edits a draft against the notes it came from, cutting without adding.",
   "author": {
     "name": "Joe Vest",
