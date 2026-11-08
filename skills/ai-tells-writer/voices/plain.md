@@ -11,10 +11,11 @@ Plain, direct, and specific. Each sentence says one thing and moves the reader f
 This voice wasn't built from samples, so these numbers are targets.
 
 - Sentence length: median 12 to 18 words, with nine in ten under 30.
-- Paragraphs: 2 to 4 sentences.
+- Paragraphs: 2 to 4 connected sentences.
+- Lists: only for steps the reader follows in order, or values the reader looks up. Everything else is prose.
+- Headings: only the ones the notes give.
 - Questions: rare. Use one only when the reader would ask it.
 - Contractions: allowed (don't, it's, we'll).
-- Lists: for steps or for three or more parallel items. Use prose for everything else.
 
 ## Habits to keep
 
@@ -22,12 +23,12 @@ This voice wasn't built from samples, so these numbers are targets.
   Example: "The backup job runs at 2 AM and copies the orders table to cold storage."
 - **Name who does what.** Put a person or a thing as the subject, doing something.
   Example: "The scheduler retries a failed job twice, then pages the on-call engineer."
-- **One idea per sentence.** Split a sentence that makes two claims.
-  Example: "The cache keeps results for an hour. After that, the service reads from disk."
+- **Link each sentence to the one before.** Say how a point follows from the last one, and keep one claim per sentence unless the two depend on each other.
+  Example: "The cache keeps results for an hour, which covers most repeat requests. After that, the service reads from disk, so the first request of each hour is slower."
 - **Use the specifics the notes give.** Use the numbers and names in the notes, and leave a bracketed placeholder where they give none.
   Example: "The import took [how long] on the old server."
 - **Give orders in instructions.** In steps, start with the verb.
-  Example: "Stop the service. Copy the config file. Start the service again."
+  Example: "Stop the service before you copy the config file, then start it again."
 - **End when the content ends.** The last sentence of a section is its last fact or step.
 
 ## Habits to avoid

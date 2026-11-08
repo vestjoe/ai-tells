@@ -392,8 +392,8 @@ def test_voice_stats_counts_sentences_and_skips_code():
     out = voice_stats(text, '--json')
     assert out.returncode == 0, out.stderr
     s = json.loads(out.stdout)
-    assert s['sentences'] == 5, s            # three prose sentences plus two list items; code skipped
-    assert s['question_share'] == 0.2, s
+    assert s['sentences'] == 3, s            # three prose sentences; code and list items skipped
+    assert s['question_share'] == 0.33, s
     assert s['contractions_per_100_words'] > 0, s   # curly apostrophe counts
     assert s['person_per_1000_words']['we'] > 0, s
 
@@ -500,9 +500,17 @@ def test_voice_stats_reads_a_word_export():
             'nmap -sV -p 1-1000 10.0.0.0/24 -oA scan\n'
             'The team called this \u201cliving off the land.\u201d It means using what is already there.\n')
     s = json.loads(voice_stats(text, '--json').stdout)
-    assert s['sentences'] == 6, s            # 2 + 2 list items + 2; headings and the command line skipped
+    assert s['sentences'] == 4, s            # 2 + 2; list items, headings, and the command line skipped
     assert s['paragraph_median'] == 2, s
-    assert s['list_item_share'] == 0.5, s
+
+
+def test_voice_stats_leaves_layout_out():
+    # Bullets are how a document is laid out, not how its writer writes. They don't count, and no list share is reported.
+    text = 'We plan first. The plan names the goal.\n- Scope\n- Contacts\n- Dates\n'
+    s = json.loads(voice_stats(text, '--json', name='notes.md').stdout)
+    assert 'list_item_share' not in s, s
+    assert s['sentences'] == 2, s
+    assert s['sentence_median'] == 4, s
 
 
 def test_voice_stats_reads_each_line_of_a_txt_file_as_a_paragraph():

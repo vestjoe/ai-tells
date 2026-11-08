@@ -25,29 +25,42 @@ ${CLAUDE_SKILL_DIR}/scripts/voice_stats.py <scratch>/*.txt
 
 Copy the numbers into the profile's `Numbers` section and round them to a range the writer can aim for. A median sentence of 17.4 words becomes a target of 15 to 19 words.
 
-## 3. Find the habits to avoid
+Headings, tables, and list items don't count toward these numbers, because they show how the document was laid out, not how the person writes. A book full of bullets still has a voice in its paragraphs.
+
+## 3. Ask about layout
+
+Ask the person how they want new writing laid out, and put the answers in `Numbers`:
+
+- Lists: when, if ever, a draft may use bullets or numbered steps.
+- Headings: only the ones the notes give, or more.
+- Paragraph length, in sentences.
+
+With no preference given, the default is connected paragraphs. Lists are kept for steps the reader follows in order or values the reader looks up. Don't copy the samples' layout into the profile.
+
+## 4. Find the habits to avoid
 
 ```bash
 ${CLAUDE_SKILL_DIR}/../ai-tells-auditor/scripts/audit.sh --min=warning <scratch>/*.txt
 ```
 
-Count the hits per rule. Each warning or error rule with many hits across the samples goes under `Habits to avoid`, with the rule name and what to write instead. Leave suggestion-level habits alone (passives, hedges, an occasional em dash): the auditor treats them as often fine, and they may be part of how the person sounds.
+Count the hits per rule. Each warning or error rule with many hits across the samples goes under `Habits to avoid`, with the rule name and what to write instead. Leave suggestion-level habits alone (passives, hedges, an occasional em dash): the auditor treats them as often fine, and they may be part of how the person sounds. Skip rules whose hits come from the text export rather than the writing, such as sentences split across lines.
 
-## 4. Find the habits to keep
+## 5. Find the habits to keep
 
 Read enough of the samples to hear the writer: at least a few thousand words from different parts. Note how they:
 
 - open a section and explain a term
 - give an example or an instruction
+- link one sentence to the next
 - choose words, including the ones they never use
 
-Write each habit as an instruction, with one or two example sentences. Write the examples yourself, on a made-up topic. Don't take them from the samples. Don't paraphrase a sample sentence either.
+Write each habit as an instruction, with an example of two or three connected sentences. Write the examples yourself, on a made-up topic. Don't take them from the samples, and don't paraphrase a sample sentence. The writer copies whatever the examples do, so run the auditor on the finished profile and rewrite any example it flags.
 
 When the samples come from more than one author, describe one writer. Keep what they share and what the person asked for, and drop the habits that would make the voice sound like two people.
 
 Leave person (I, we, you) out of the habits. The writer chooses it per piece, and the profile's `Person` section says so.
 
-## 5. Check for copying
+## 6. Check for copying
 
 ```bash
 ${CLAUDE_SKILL_DIR}/scripts/check_voice.py <profile> <scratch>/*.txt
@@ -55,6 +68,6 @@ ${CLAUDE_SKILL_DIR}/scripts/check_voice.py <profile> <scratch>/*.txt
 
 It must print `TOTAL: 0`. If it finds a copied run, rewrite that line of the profile and run it again.
 
-## 6. Save
+## 7. Save
 
 Save the profile as `~/.claude/voices/<name>.md`. Never save it inside a repository. Tell the person the path, the numbers, the habits to keep and avoid in one line each, and that the scratch copies of the samples can be deleted.

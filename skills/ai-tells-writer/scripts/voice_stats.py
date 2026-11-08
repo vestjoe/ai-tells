@@ -9,11 +9,11 @@ Reads every file as one sample and prints:
   paragraph_median             sentences per paragraph
   question_share               share of sentences that are questions (0-1)
   contractions_per_100_words   don't, it's, we'll ...
-  list_item_share              list items as a share of all blocks (0-1)
   person_per_1000_words        I, we, and you, per 1,000 words
 
 Front matter, fenced code, and short lines with no end punctuation (headings,
-commands) are skipped. Each list item counts as one block and one sentence.
+commands) are skipped. So are list items: bullets are how a document is laid
+out, not how its writer writes, and they would drag the sentence numbers down.
 In a .md file, blank lines separate paragraphs. In any other file, such as a
 .txt export of a .docx, each line is one paragraph.
 
@@ -98,13 +98,12 @@ def percentile(values, p):
 
 def stats(*files):
     """Numbers for one or more files, each a (text, line_per_para) pair split into blocks on its own."""
-    bl = [b for text, line_mode in files for b in blocks(text, line_mode)]
+    paras = [body for text, line_mode in files for kind, body in blocks(text, line_mode) if kind == 'para']
     sents, per_para = [], []
-    for kind, body in bl:
-        ss = [body] if kind == 'item' else sentences(body)
+    for body in paras:
+        ss = sentences(body)
         sents.extend(ss)
-        if kind == 'para':
-            per_para.append(len(ss))
+        per_para.append(len(ss))
     lengths = [len(WORD.findall(s)) for s in sents]
     words = [w.lower() for s in sents for w in WORD.findall(s)]
     n = len(words)
@@ -117,7 +116,6 @@ def stats(*files):
         'paragraph_median': round(statistics.median(per_para), 2) if per_para else 0,
         'question_share': round(sum(s.rstrip(CLOSERS).endswith('?') for s in sents) / len(sents), 2) if sents else 0,
         'contractions_per_100_words': per(sum(len(CONTRACTION.findall(s)) for s in sents), 100),
-        'list_item_share': round(sum(k == 'item' for k, _ in bl) / len(bl), 2) if bl else 0,
         'person_per_1000_words': {k: per(sum(w in forms for w in words), 1000) for k, forms in PERSON.items()},
     }
 
