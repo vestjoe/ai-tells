@@ -26,9 +26,11 @@ With no voice named, use `plain`. If a named voice isn't in either folder, say s
 
 Read the whole profile before writing. Follow its numbers and both lists of habits.
 
-## 2. Number the note points
+## 2. Number the note points and plan the paragraphs
 
 List the notes' points in order, numbered. A point is one claim, step, or example. Keep sub-points under their parent.
+
+Then group the points into paragraphs, one idea per paragraph, and write down how each point leads to the next: because, so, which means, the answer to that is. Notes are fragments with the links left out. The draft's job is to supply those links.
 
 ## 3. Choose the person
 
@@ -42,10 +44,11 @@ If the notes don't settle it, ask before drafting.
 
 ## 4. Write the draft
 
-- Cover every note point, in the notes' order. Use the notes' headings if they have any.
+- Cover every note point. Keep the paragraphs in the notes' order, but inside a paragraph put the points in whatever order makes the reasoning read straight through. Use the notes' headings if they have any.
+- Make each sentence follow from the one before it. Don't turn each note into its own sentence and set them side by side. Join a point to the one it explains, answers, or limits, in the same sentence or the next, and say how they connect. A sentence that could be moved anywhere in the paragraph isn't connected yet.
 - Write in the voice. Match its sentence and paragraph lengths, and use its habits to keep.
 - Use only the facts, numbers, names, sources, and examples in the notes. Where a sentence needs one the notes don't give, write a bracketed placeholder that says what's missing, such as `[how many hosts]` or `[source]`.
-- You may add sentences that join the points, such as a topic sentence or an explanation of a term the notes use. These state or restate a note's point and don't add a claim.
+- Add the words that link the points, such as a topic sentence, the word `because`, or a line that says how one point leads to the next. Every paragraph needs them. They join or restate the notes' points and don't add a fact.
 - Write it once. Don't review or rewrite the draft. The auditor checks it.
 
 Save the draft next to the notes as `<notes-name>.draft.md`, or where the user says. For pasted notes, show the draft in the reply.
