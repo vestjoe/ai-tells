@@ -34,6 +34,7 @@ Write `<name>.claims.md`: one line per claim in the draft, grouped under the dra
 <!-- vale off -->
 - **Repeats.** When a note point is stated more than once, keep the plainest statement in the place the notes put it and cut the others.
 - **Announcers and summaries.** Cut sentences that only say what comes next or what was just said ("There are three options.", "Both problems waste time.").
+- **Links stay.** Words that tie a sentence to the one before it aren't announcers: "To answer that", "Once you see the threat as a person", a "because" or "so" clause that gives the reason. Cutting them leaves sentences side by side with no thread between them.
 - **Examples stay.** An example of a point isn't a repeat of it. Cut an example only if it repeats another example of the same point.
 - **`[not in notes]` claims stay.** Don't cut them. List them for the writer (step 4).
 - Cut whole sentences or clauses. Don't reword what's left.
@@ -42,7 +43,7 @@ Write `<name>.claims.md`: one line per claim in the draft, grouped under the dra
 ## 3. Repair, without writing
 
 - **A section that lost its setup.** If a cut leaves a section or paragraph opening on a detail with nothing to explain it, put the cut sentence back. Don't only mention it in the report. Restore it, then list it there.
-- **Long joined sentences.** You may split a sentence at ", and" when the halves are separate claims. Splitting doesn't add words.
+- **Joined sentences stay joined.** Don't split a sentence whose halves follow from each other, such as a step and its result. Split at ", and" only when a sentence runs past 40 words and its halves are unrelated claims.
 - **Anything else the cut broke.** Ask the writer. Don't write a new sentence to fill a gap.
 
 ## 4. Check and report

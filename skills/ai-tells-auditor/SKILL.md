@@ -47,7 +47,7 @@ Raw Vale output repeats itself and flags text that's fine. Turn it into a short 
 - **Merge overlaps.** The `Custom` rules and the packs often flag the same span (`Custom.StockAdjective` and `ai-tells.OverusedVocabulary` on the same word). Report each span once.
 - **Group repeats.** "`leverage` ×5 (lines 3, 9, 14, 22, 30)" is more useful than five entries.
 - **Rank by level, then by how much the fix helps.** `error` items (service filler, praise for the question, "not just X but Y", "In summary") are rarely worth keeping. `suggestion` items (passives, hedges, one em dash) are often fine. Raise them only where the text reads flat or they cluster.
-- **Treat a hit as a prompt, not a verdict.** "Robust" can be a real property of an estimator. "Studies show" is fine with a citation after it. "Implement" is the precise word in a spec. Reread the sentence, and drop the hit if the sentence says something specific.
+- **Treat a hit as a prompt, not a verdict.** "Robust" can be a real property of an estimator. "Studies show" is fine with a citation after it. "Implement" is the precise word in a spec. Reread the sentence, and drop the hit if the sentence says something specific. A `ConsequenceClause` hit on a real cause ("the server is in the server zone, so the attacker moves to it") is how prose links ideas, not a tell.
 - **Note document-level signals.** `RuleOfThree`, `UniformSentences`, and `EmDashDensity` describe a pattern across the text, not one word. Report each as one pattern for the whole text.
 <!-- vale on -->
 
@@ -83,6 +83,7 @@ If the writer has the notes, outline, or brief the draft came from and wants it 
 
 <!-- vale off -->
 - Rewrite the sentence, not the word. Swapping "leverage" for "utilize" trades one tell for another.
+- Keep the links between sentences. Fix a flagged phrase inside its own sentence, and keep the words that tie one idea to the next: because, so, which means, once, to answer that. Don't split a connected sentence into short ones to clear a hit. A run of short, unlinked sentences is a tell too, and it's harder to read than the phrase it replaced.
 - Keep the meaning and the facts. Never add a number, name, source, or claim to make a sentence concrete. If a fix needs a fact you don't have, leave a question for the writer.
 - Keep the writer's voice, technical terms, and anything inside code, links, and quotes.
 - After editing, run `audit.sh` again and report what's left and why you kept it.
