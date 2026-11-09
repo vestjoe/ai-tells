@@ -2,13 +2,13 @@
 
 A Claude Code plugin with three skills for clearer prose, one per step from notes to finished text:
 
-- **`/ai-tells-auditor:ai-tells-writer`** drafts from your notes, outline, or brief in a chosen voice. It keeps every point in the notes and leaves a bracketed placeholder where a fact is missing. It also lists every sentence that isn't in the notes. It can also build a voice from your own writing.
+- **`/ai-tells-auditor:ai-tells-writer`** drafts from your notes, outline, or brief in a chosen voice. It keeps every point in the notes and joins the points into connected paragraphs instead of writing one sentence per note. Where a fact is missing, it leaves a bracketed placeholder. It also lists every sentence that isn't in the notes. It can also build a voice from your own writing.
 - **`/ai-tells-auditor:ai-tells-auditor`** audits a draft and reports what to fix.
-- **`/ai-tells-auditor:ai-tells-editor`** edits a draft against the notes, outline, or brief it came from. It cuts repeats, announcers, and summaries and keeps every point in the notes. It doesn't add anything, and it lists every sentence that isn't in the notes.
+- **`/ai-tells-auditor:ai-tells-editor`** edits a draft against the notes, outline, or brief it came from. It cuts repeats, announcers, and summaries and keeps every point in the notes. It keeps the words that link one sentence to the next and doesn't split a joined sentence into fragments. It doesn't add anything, and it lists every sentence that isn't in the notes.
 
 The auditor flags wordy, vague, and padded writing, and the patterns of writing on autopilot, by a person or a model. These include stock phrases, inflated words, set-up-and-reveal framing, editorial asides, hedges, em dashes, and uniform sentence rhythm.
 
-The auditor works in two passes. [Vale](https://vale.sh) checks the wording with a pinned config. Then Claude checks what a linter can't: invented specifics, unsourced claims about people, false balance, and repeated section formulas. You get one ranked list of findings with a fix for each. Claude edits the document only when you ask.
+The auditor works in two passes. [Vale](https://vale.sh) checks the wording with a pinned config. Then Claude checks what a linter can't: invented specifics, unsourced claims about people, false balance, and repeated section formulas. You get one ranked list of findings with a fix for each. Claude edits the document only when you ask, and it fixes a flagged phrase inside its sentence without breaking the links between sentences.
 
 ## Install
 
@@ -73,15 +73,16 @@ pbpaste | skills/ai-tells-auditor/scripts/audit.sh             # the clipboard (
 
 A voice profile tells the writer how someone writes. It's one Markdown file with:
 
-- **Numbers** measured from writing samples, such as sentence and paragraph length.
-- **Habits to keep**, each with an example sentence written for the profile.
+- **Numbers** measured from writing samples, such as sentence and paragraph length. Headings, tables, and list items don't count, because they show how a document was laid out, not how its writer writes.
+- **Layout**: when to use lists and headings, and how long a paragraph runs. The writer asks you for these instead of copying the samples' layout. With no answer, drafts use connected paragraphs, with lists only for ordered steps or values the reader looks up.
+- **Habits to keep**, each with a short example of connected sentences written for the profile.
 - **Habits to avoid**, taken from the auditor's warnings and errors on the samples, so the writer doesn't learn them.
 
 Person (`I`, `we`, or `you`) isn't part of a voice. The writer picks it for each piece from the notes, and asks when the notes don't make it clear.
 
 The plugin comes with one voice, `plain`, in `skills/ai-tells-writer/voices/plain.md`. It's the default, and the example of the format.
 
-To build your own, ask Claude to build a voice from your writing samples and give it a name. The writer follows `references/build-voice.md`. It measures the samples and runs the auditor on them, then writes the habits in new words. Last, `scripts/check_voice.py` confirms the profile doesn't copy any run of 8 or more words from the samples.
+To build your own, ask Claude to build a voice from your writing samples and give it a name. The writer follows `references/build-voice.md`. It measures the samples and asks how you want new writing laid out. It runs the auditor on the samples, then writes the habits in new words and runs the auditor on the profile's own examples. Last, `scripts/check_voice.py` confirms the profile doesn't copy any run of 8 or more words from the samples.
 
 Your profiles live in `~/.claude/voices/<name>.md`, outside the plugin, so they survive updates and reinstalls. The writer looks there first, then at the voices that come with the plugin.
 
