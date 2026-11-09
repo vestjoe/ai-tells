@@ -24,7 +24,7 @@
     {
       "id": 2,
       "prompt": "does this sound like chatgpt wrote it? i'm sending it to my landlord tonight\n\nHi Mark,\n\nI hope this email finds you well! I wanted to reach out regarding the kitchen faucet. It's not just a minor drip, but a significant issue that's impacting our daily routine. Moreover, the water bill has increased substantially \u2014 a testament to how much water is being wasted.\n\nI completely understand that you're busy, and I truly appreciate everything you do. That said, it would be incredibly helpful if a plumber could come by at your earliest convenience. Ultimately, addressing this promptly will benefit us both.\n\nThank you so much for your time and consideration!\n\nBest regards,\nPriya",
-      "expected_output": "Answers the question directly, lists the tells with quotes, flags 'increased substantially', and includes a plainer rewrite with bracketed placeholders for facts the email doesn't give.",
+      "expected_output": "Answers the question directly, lists the tells with quotes, flags 'increased substantially', and includes a plainer rewrite with bracketed placeholders for facts the email doesn't give. The auditor reports without editing; the rewrite goes through the editor.",
       "files": [],
       "assertions": [
         "Answers the question directly (yes, it reads as AI-written) near the top",
@@ -37,7 +37,7 @@
     {
       "id": 3,
       "prompt": "tighten up evals/files/README-draft.md and fix the AI-sounding stuff. edit the file directly",
-      "expected_output": "The file is edited in place: filler, inflated words, and stock phrases removed; code blocks, the command names, flags, and the Python 3.9 requirement unchanged; no new facts invented (e.g. the '10 MB in milliseconds' claim is questioned or flagged, not made more specific). The audit is re-run after editing and remaining hits are explained.",
+      "expected_output": "The auditor hands the fixes to the editor, and the file is edited in place: filler, inflated words, and stock phrases removed; code blocks, the command names, flags, and the Python 3.9 requirement unchanged; no new facts invented (e.g. the '10 MB in milliseconds' claim is questioned or flagged, not made more specific). The audit is re-run after editing and remaining hits are explained.",
       "files": [
         "evals/files/README-draft.md"
       ],

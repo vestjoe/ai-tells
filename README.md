@@ -2,13 +2,15 @@
 
 A Claude Code plugin with three skills for clearer prose, one per step from notes to finished text:
 
-- **`/ai-tells-auditor:ai-tells-writer`** drafts from your notes, outline, or brief in a chosen voice. It keeps every point in the notes and joins the points into connected paragraphs instead of writing one sentence per note. Where a fact is missing, it leaves a bracketed placeholder. It also lists every sentence that isn't in the notes. It can also build a voice from your own writing.
-- **`/ai-tells-auditor:ai-tells-auditor`** audits a draft and reports what to fix.
-- **`/ai-tells-auditor:ai-tells-editor`** edits a draft against the notes, outline, or brief it came from. It cuts repeats, announcers, and summaries and keeps every point in the notes. It keeps the words that link one sentence to the next and doesn't split a joined sentence into fragments. It doesn't add anything, and it lists every sentence that isn't in the notes.
+- **`/ai-tells-auditor:ai-tells-writer`** drafts from your notes, outline, or brief in a chosen voice. It keeps every point in the notes and joins the points into connected paragraphs instead of writing one sentence per note. Where a fact is missing, it leaves a bracketed placeholder. It then runs the auditor and the editor on the draft and leaves the first draft, the audit report, and the finished draft side by side. Its report lists each sentence in the finished draft that isn't in the notes, so you decide whether it stays. It can also build a voice from your own writing.
+- **`/ai-tells-auditor:ai-tells-auditor`** audits a draft and reports ranked findings with a fix for each. It never changes the text. When you want fixes, it hands the findings you pick to the editor.
+- **`/ai-tells-auditor:ai-tells-editor`** is the only skill that changes text. It rewrites each flagged sentence in the voice and cuts repeats, announcers, and summaries. It works with the notes the draft came from or without them. Then `check_edit.py` checks that the edit didn't add a fact, and any number, name, or quote the source lacks becomes a bracketed placeholder. It also lists every sentence that adds a claim the source doesn't make, where the source is the notes or, without them, the original draft.
+
+The skills share one rules file, `skills/ai-tells-auditor/references/standard.md`. It sets what a draft may say (the source) and how a voice applies. It also lists the AI tells to remove and says how to keep sentences linked. The writer drafts to it and the editor edits to it. The auditor reports where a draft misses it. The rules appear nowhere else.
 
 The auditor flags wordy, vague, and padded writing, and the patterns of writing on autopilot, by a person or a model. These include stock phrases, inflated words, set-up-and-reveal framing, editorial asides, hedges, em dashes, and uniform sentence rhythm.
 
-The auditor works in two passes. [Vale](https://vale.sh) checks the wording with a pinned config. Then Claude checks what a linter can't: invented specifics, unsourced claims about people, false balance, and repeated section formulas. You get one ranked list of findings with a fix for each. Claude edits the document only when you ask, and it fixes a flagged phrase inside its sentence without breaking the links between sentences.
+The auditor works in two passes. [Vale](https://vale.sh) checks the wording with a pinned config. Then Claude checks what a linter can't: invented specifics, unsourced claims about people, false balance, and repeated section formulas. You get one ranked list of findings with a fix for each.
 
 ## Install
 
@@ -45,15 +47,17 @@ Run a skill by name, with the files after it:
 /ai-tells-auditor:ai-tells-editor drafts/chapter4.md notes/chapter4-outline.md
 ```
 
-The writer saves its draft next to the notes as `<notes-name>.draft.md`. With no voice named, it uses `plain`.
+The writer saves its draft next to the notes as `<notes-name>.draft.md`. It audits that draft into `<notes-name>.audit.md`, then edits a copy into `<notes-name>.final.md`. The editor's own files, `<notes-name>.final.orig.md` and `<notes-name>.final.claims.md`, stay beside them. With no voice named, the writer uses `plain`.
 
-The editor saves the original as `<name>.orig.md`, edits the draft in place, and runs `scripts/check_edit.py` to confirm that no sentence is new and no section grew.
+The auditor reports and leaves the file alone. To apply fixes, ask for them or pick findings from its report, and it hands those to the editor. For a short text pasted into the chat, such as an email or a message, it runs the editor without being asked and shows the fixed text.
+
+The editor saves the original as `<name>.orig.md` and edits the draft in place. It runs `scripts/check_edit.py` to confirm the edit didn't add a fact. With notes, the script checks facts against the notes alone. Without notes, it checks them against the original draft.
 
 Or ask Claude in your own words:
 
 - "Check `docs/launch-post.md` for AI tells."
 - "Does this email sound like ChatGPT wrote it?" followed by the pasted text.
-- "Tighten this README and fix what you find."
+- "Tighten this README and fix what you find." The auditor reports, and the editor makes the fixes.
 - "Edit `chapter4.md` against my outline in `chapter4-outline.md`."
 - "Write a draft from `chapter5-notes.md` in my voice."
 - "Build a voice called `my-voice` from the files in `~/writing/samples/`."
@@ -92,7 +96,8 @@ Your profiles live in `~/.claude/voices/<name>.md`, outside the plugin, so they 
 
 In `skills/ai-tells-auditor/`:
 
-- `SKILL.md`: the audit steps Claude follows.
+- `SKILL.md`: the audit steps Claude follows. It reports and doesn't edit.
+- `references/standard.md`: the shared standard that all three skills read.
 - `.vale.ini`: turns on `Custom` and five packs, each pinned to a release:
   - [vale-ai-tells](https://github.com/tbhb/vale-ai-tells): AI-writing patterns.
   - [proselint](https://github.com/vale-cli/proselint): clichés and redundancy.
@@ -114,8 +119,8 @@ In `skills/ai-tells-writer/`:
 
 In `skills/ai-tells-editor/`:
 
-- `SKILL.md`: the edit-against-notes steps.
-- `scripts/check_edit.py`: compares the original and the edit and prints kept, cut, reworded, and new sentences, plus any section that grew.
+- `SKILL.md`: the editing steps, with or without notes.
+- `scripts/check_edit.py`: compares the original and the edit and prints cut, reworded, and new sentences, plus any section that grew. It flags as `FACT` any number, name, quoted string, or code span the source lacks, and any fenced code block that differs from the source. It exits 1 when it finds one.
 
 ## How to read the results
 

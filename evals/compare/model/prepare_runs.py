@@ -13,7 +13,7 @@ Writes, per eval, arm and run:
         brief.md   the full prompt to hand an executor subagent
 
 Arms:
-    ai-tells-auditor  this repo's skill, read from skills/ai-tells-auditor/SKILL.md
+    ai-tells-auditor  this repo's three skills (auditor, editor, writer), read from skills/*/SKILL.md
     vale-plugin       Vale's five skills and its edit hook, with .vale.ini set by --vale-config:
                         skill  this skill's own .vale.ini (Custom rules, packs, tuning). Tests whether
                                the SKILL.md and judgment pass add anything over Vale's skills.
@@ -32,7 +32,8 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
-SKILL = os.path.join(ROOT, 'skills', 'ai-tells-auditor')
+SKILLS_ROOT = os.path.join(ROOT, 'skills')
+SKILL = os.path.join(SKILLS_ROOT, 'ai-tells-auditor')
 STYLES = os.path.join(SKILL, 'styles')
 
 SETUP_INI = 'StylesPath = {0}\nMinAlertLevel = suggestion\n\n[*.md]\nBasedOnStyles = Vale, Microsoft\n'
@@ -57,11 +58,15 @@ The user's message follows between the markers.
 USER>>>
 """
 
-SKILL_TOOLS = """Installed skills (the only ones; ignore any other copy of ai-tells-auditor you may see, including
+SKILL_NAMES = ('ai-tells-auditor', 'ai-tells-editor', 'ai-tells-writer')
+
+SKILL_TOOLS = """Installed skills (the only ones; ignore any other copy of these skills you may see, including
 through the Skill tool, and don't use any other skill):
 
-- ai-tells-auditor: {description}
-  Location: {skill}/SKILL.md. Read it when it applies and follow it; its own files are in {skill}."""
+{skills}
+
+Read a skill's SKILL.md when it applies and follow it. Each skill's own files are in its folder, and the skills
+share {skills_root}/ai-tells-auditor/references/standard.md."""
 
 VALE_TOOLS = """Installed plugin: vale (github.com/vale-cli/agent-tools, commit {commit}). These are its skills, and
 the only ones installed; ignore any ai-tells-auditor skill you may see, including through the Skill tool:
@@ -115,7 +120,12 @@ def main():
         sys.exit('already exists: ' + args.out)
     commit = subprocess.run(['git', '-C', tools, 'rev-parse', 'HEAD'], capture_output=True, text=True).stdout.strip()
 
-    _, skill_desc = frontmatter(os.path.join(SKILL, 'SKILL.md'))
+    skill_lines = []
+    for sk in SKILL_NAMES:
+        sk_path = os.path.join(SKILLS_ROOT, sk, 'SKILL.md')
+        _, sk_desc = frontmatter(sk_path)
+        skill_lines.append('- {0}: {1}\n  Location: {2}'.format(sk, sk_desc, sk_path))
+    skill_tools = SKILL_TOOLS.format(skills='\n'.join(skill_lines), skills_root=SKILLS_ROOT)
     vale_skills = []
     for d in sorted(os.listdir(os.path.join(tools, 'skills'))):
         path = os.path.join(tools, 'skills', d, 'SKILL.md')
@@ -153,7 +163,7 @@ def main():
                         fh.write(vale_ini)
                     tool_text = VALE_TOOLS.format(commit=commit, skills='\n'.join(vale_skills), tools=tools)
                 else:
-                    tool_text = SKILL_TOOLS.format(description=skill_desc, skill=SKILL)
+                    tool_text = skill_tools
                 git(project, 'init', '-q', '-b', 'main')
                 git(project, 'add', '-A')
                 git(project, 'commit', '-q', '--allow-empty', '-m', 'initial')

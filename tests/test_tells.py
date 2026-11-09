@@ -325,29 +325,101 @@ def test_audit_script_reports_a_missing_path():
 CHECK_EDIT = os.path.join(HERE, '..', 'skills', 'ai-tells-editor', 'scripts', 'check_edit.py')
 
 
-def check_edit(orig, edited):
+def check_edit(orig, edited, notes=None):
     with tempfile.TemporaryDirectory() as d:
-        paths = [os.path.join(d, n) for n in ('orig.md', 'edited.md')]
-        for p, text in zip(paths, (orig, edited)):
+        names = ('orig.md', 'edited.md') + (('notes.md',) if notes is not None else ())
+        paths = [os.path.join(d, n) for n in names]
+        for p, text in zip(paths, (orig, edited, notes)):
             with open(p, 'w', encoding='utf-8') as fh:
                 fh.write(text)
         return subprocess.run([sys.executable, CHECK_EDIT] + paths, capture_output=True, text=True)
 
 
-def test_check_edit_sorts_cut_reworded_and_new():
-    orig = ('# Plan\n\nIn this section we cover the plan. The build runs nightly on two hosts. '
-            'It leverages a robust cache. In short, the build runs nightly.\n\n```\nnot prose.\n```\n')
-    edited = ('# Plan\n\nThe build runs nightly on two hosts. It uses a cache. '
-              'Costs fell [by how much].\n\n```\nnot prose.\n```\n')
+def test_check_edit_lists_rewrites_without_failing():
+    orig = '# Plan\n\nIn this section we cover the plan. The build runs nightly on two hosts. It leverages a robust cache.\n'
+    edited = '# Plan\n\nThe build runs nightly on two hosts, and it uses a cache so each run starts warm.\n'
     out = check_edit(orig, edited)
     assert out.returncode == 0, out.stdout
-    assert 'kept 1, cut 2, reworded 1, NEW 1' in out.stdout, out.stdout
-    assert 'NEW:      Costs fell [by how much].' in out.stdout, out.stdout
+    assert 'new facts 0' in out.stdout, out.stdout
 
 
-def test_check_edit_flags_a_section_that_grew():
-    out = check_edit('# A\n\nShort.\n\n# B\n\nAlso short.\n', '# A\n\nShort.\n\n# B\n\nAlso short, and now it says more.\n')
-    assert out.returncode == 1 and 'GREW:     section "B" 2 -> 7 words' in out.stdout, out.stdout
+def test_check_edit_flags_an_invented_number_name_and_quote():
+    orig = 'The build runs nightly. Costs fell.\n'
+    edited = 'The build runs nightly on 4 hosts. Costs fell, as Dana Ortiz said, "by half".\n'
+    out = check_edit(orig, edited)
+    assert out.returncode == 1, out.stdout
+    for token in ('"4"', '"Dana"', '"Ortiz"', '"by half"'):
+        assert 'FACT:     ' + token in out.stdout, (token, out.stdout)
+
+
+def test_check_edit_checks_facts_against_the_notes_not_the_draft():
+    notes = '- build runs nightly\n- two hosts\n'
+    draft = 'The build runs nightly on two hosts, about 40 minutes each.\n'
+    edited = 'The build runs nightly on two hosts, about 40 minutes each.\n'
+    assert check_edit(draft, edited).returncode == 0
+    out = check_edit(draft, edited, notes)
+    assert out.returncode == 1 and 'FACT:     "40"' in out.stdout, out.stdout
+
+
+def test_check_edit_ignores_placeholders_number_formats_and_sentence_starts():
+    orig = 'The team ran 1,000 tests. Once that passed, they shipped.\n'
+    edited = 'Once the team ran 1000 tests and [how many] passed, they shipped.\n'
+    out = check_edit(orig, edited)
+    assert out.returncode == 0 and 'new facts 0' in out.stdout, out.stdout
+
+
+def test_check_edit_flags_changed_code():
+    orig = 'Run this.\n\n```\nmake build\n```\n\nUse `--fast` when needed.\n'
+    edited = 'Run this.\n\n```\nmake release\n```\n\nUse `--quick` when needed.\n'
+    out = check_edit(orig, edited)
+    assert out.returncode == 1 and out.stdout.count('FACT:') == 2, out.stdout
+
+
+def test_check_edit_warns_but_passes_when_a_section_grows():
+    out = check_edit('# A\n\nShort.\n', '# A\n\nShort, because the cache is warm.\n')
+    assert out.returncode == 0 and 'GREW:     section "A" 1 -> 6 words' in out.stdout, out.stdout
+
+
+def test_check_edit_checks_headings():
+    out = check_edit('# Head\n\nText.\n', '# Head Dana 9\n\nText.\n')
+    assert out.returncode == 1 and 'FACT:     "Dana"' in out.stdout and 'FACT:     "9"' in out.stdout, out.stdout
+    out = check_edit('## Step 2 Acme\n\nIt ran.\n', '## Setup\n\nIt ran at Acme in step 2.\n')
+    assert out.returncode == 0 and 'new facts 0' in out.stdout, out.stdout
+
+
+def test_check_edit_flags_inline_code_containing_a_period_and_space():
+    out = check_edit('Use it.\n', 'Use `a. b` here.\n')
+    assert out.returncode == 1 and 'FACT:     "a. b"' in out.stdout, out.stdout
+
+
+def test_check_edit_flags_a_fence_with_a_line_deleted():
+    orig = 'Run:\n\n```\nmake clean\nmake build\n```\n'
+    out = check_edit(orig, 'Run:\n\n```\nmake build\n```\n')
+    assert out.returncode == 1 and 'FACT:     "make build"' in out.stdout, out.stdout
+    assert check_edit(orig, orig).returncode == 0
+
+
+def test_check_edit_flags_a_name_after_a_leading_quote():
+    out = check_edit('Costs fell.\n', '"Costs fell," Dana said.\n')
+    assert out.returncode == 1 and 'FACT:     "Dana"' in out.stdout, out.stdout
+
+
+def test_check_edit_ignores_digits_in_placeholders_and_flags_unsourced_quotes():
+    assert check_edit('It ran.\n', 'It ran [3 items].\n').returncode == 0
+    out = check_edit('It ran.\n', 'It ran, "very well".\n')
+    assert out.returncode == 1 and 'FACT:     "very well"' in out.stdout, out.stdout
+
+
+def test_check_edit_treats_1000_and_1_000_as_one_number():
+    assert check_edit('It had 1000 rows.\n', 'It had 1,000 rows.\n').returncode == 0
+    assert check_edit('It had 1,000 rows.\n', 'It had 1000 rows.\n').returncode == 0
+
+
+def test_check_edit_lists_a_new_sentence_start_without_failing():
+    out = check_edit('The build runs nightly.\n', 'Dana says the build runs nightly. The build is fast.\n')
+    assert out.returncode == 0 and 'new facts 0' in out.stdout, out.stdout
+    assert 'CHECK:    "Dana"' in out.stdout and '"The"' not in out.stdout, out.stdout
+    assert 'CHECK' not in check_edit('Dana runs it.\n', 'Dana runs it nightly.\n').stdout
 
 
 def test_version_is_bumped_when_the_skill_changes():
@@ -468,6 +540,15 @@ def test_writer_prose_passes_the_auditor():
 
 
 SKILLS = os.path.join(HERE, '..', 'skills')
+STANDARD = os.path.join(SKILLS, 'ai-tells-auditor', 'references', 'standard.md')
+
+
+def test_standard_has_its_sections_and_passes_the_auditor():
+    with open(STANDARD, encoding='utf-8') as fh:
+        heads = [l[3:].strip() for l in fh if l.startswith('## ')]
+    assert heads == ['The source', 'The voice', 'AI tells', 'Linked sentences'], heads
+    out = subprocess.run([AUDIT, '--min=warning', STANDARD], capture_output=True, text=True, env=dict(os.environ, VALE=VALE or ''))
+    assert out.returncode == 0 and not [l for l in out.stdout.splitlines() if l[:1].isdigit()], out.stdout
 
 
 def frontmatter(path):
@@ -486,11 +567,36 @@ def test_every_skill_fits_claude_code_limits():
         assert len(text.splitlines()) < 500, name
 
 
+def skill_text(name):
+    return frontmatter(os.path.join(SKILLS, name, 'SKILL.md'))
+
+
+LINK_RULE = "Don't split a connected sentence"
+
+
+def test_auditor_reports_and_hands_fixes_to_the_editor():
+    fields, text = skill_text('ai-tells-auditor')
+    assert 'references/standard.md' in text
+    assert '## Voice' in text and 'voice_stats.py' in text
+    assert 'ai-tells-editor' in text
+    assert 'Fix, when asked' not in text and LINK_RULE not in text
+
+
+def test_editor_rewrites_against_the_standard():
+    fields, text = skill_text('ai-tells-editor')
+    assert 'standard.md' in text and 'new facts 0' in text
+    assert "Don't reword" not in text and 'NEW 0' not in text and LINK_RULE not in text
+    assert '[notes]' in fields['argument-hint'], fields
+    assert 'python3 ${CLAUDE_SKILL_DIR}' not in text and '${CLAUDE_SKILL_DIR}/scripts/check_edit.py' in text
+
+
 def test_writer_points_at_its_own_files():
     fields, text = frontmatter(os.path.join(WRITER, 'SKILL.md'))
-    assert fields['allowed-tools'] == 'Bash(${CLAUDE_SKILL_DIR}/scripts/*)', fields
+    assert fields['allowed-tools'] == ('Bash(${CLAUDE_SKILL_DIR}/scripts/*) '
+        'Bash(${CLAUDE_SKILL_DIR}/../ai-tells-auditor/scripts/*) Bash(${CLAUDE_SKILL_DIR}/../ai-tells-editor/scripts/*)'), fields
     assert '${CLAUDE_SKILL_DIR}/references/build-voice.md' in text
-    assert '~/.claude/voices/' in text
+    assert '~/.claude/voices/' in text and 'standard.md' in text
+    assert '.audit.md' in text and '.final.md' in text
 
 
 def test_voice_stats_reads_a_word_export():
@@ -544,6 +650,31 @@ def test_build_steps_run_scripts_the_way_allowed_tools_approves():
         text = fh.read()
     assert 'python3 ${CLAUDE_SKILL_DIR}' not in text
     assert '${CLAUDE_SKILL_DIR}/scripts/voice_stats.py' in text and '${CLAUDE_SKILL_DIR}/scripts/check_voice.py' in text
+
+
+def test_rules_live_only_in_the_standard():
+    for name in os.listdir(SKILLS):
+        _, text = skill_text(name)
+        assert LINK_RULE not in text and 'never add a number' not in text.lower(), name
+        assert 'standard.md' in text, name
+
+
+CAUSE_RULE = 'A link that states a cause or a result is a claim'
+
+
+def test_the_cause_rule_lives_only_in_the_standard():
+    with open(STANDARD, encoding='utf-8') as fh:
+        assert CAUSE_RULE in fh.read()
+    for name in os.listdir(SKILLS):
+        _, text = skill_text(name)
+        assert CAUSE_RULE not in text and "notes don't give is a new fact" not in text, name
+
+
+def test_auditor_stops_at_the_report_when_another_skill_runs_it():
+    _, text = skill_text('ai-tells-auditor')
+    assert 'When another skill runs this one for the report only' in text
+    _, text = skill_text('ai-tells-writer')
+    assert 'Run it for the report only' in text
 
 
 def main():
