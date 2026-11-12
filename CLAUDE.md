@@ -1,4 +1,4 @@
-# ai-tells-auditor
+# ai-tells
 
 Run `python3 tests/test_tells.py` before every push.
 

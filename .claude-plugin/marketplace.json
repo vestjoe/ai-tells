@@ -1,13 +1,13 @@
 {
-  "name": "ai-tells-auditor",
-  "description": "A Claude Code plugin with three skills for clearer prose: a writer that drafts from notes in a chosen voice, an auditor for AI tells and autopilot writing, and an editor that cuts a draft against its notes.",
+  "name": "ai-tells",
+  "description": "Claude Code skills that draft from your notes in your voice. They catch the phrasing that makes text read as AI and fix it without adding facts your notes don't have.",
   "owner": {
     "name": "Joe Vest",
     "url": "https://github.com/vestjoe"
   },
   "plugins": [
     {
-      "name": "ai-tells-auditor",
+      "name": "ai-tells",
       "source": "./"
     }
   ]

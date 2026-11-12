@@ -58,9 +58,9 @@ Tag each sentence of the draft, as the editor does:
 
 Copy `<notes-name>.draft.md` to `<notes-name>.final.md`, next to it. The first draft stays as it is.
 
-Run the auditor (`/ai-tells-auditor:ai-tells-auditor`) on `<notes-name>.draft.md` with the voice, which is `plain` when the user named none. Run it for the report only, and give it the path to save the report to: `<notes-name>.audit.md`, next to the notes.
+Run the auditor (`/ai-tells:ai-tells-auditor`) on `<notes-name>.draft.md` with the voice, which is `plain` when the user named none. Run it for the report only, and give it the path to save the report to: `<notes-name>.audit.md`, next to the notes.
 
-Then run the editor (`/ai-tells-auditor:ai-tells-editor`) on `<notes-name>.final.md` with the notes, the voice, and `<notes-name>.audit.md`. With no finding marked `[fix]`, the editor works through the whole report. The editor checks its edit against the notes alone and leaves its own files next to the draft: `<notes-name>.final.orig.md`, a copy of the first draft, and `<notes-name>.final.claims.md`. Run each skill once.
+Then run the editor (`/ai-tells:ai-tells-editor`) on `<notes-name>.final.md` with the notes, the voice, and `<notes-name>.audit.md`. With no finding marked `[fix]`, the editor works through the whole report. The editor checks its edit against the notes alone and leaves its own files next to the draft: `<notes-name>.final.orig.md`, a copy of the first draft, and `<notes-name>.final.claims.md`. Run each skill once.
 
 ## 7. Report
 

@@ -1,10 +1,10 @@
-# ai-tells-auditor
+# ai-tells
 
 A Claude Code plugin with three skills for clearer prose, one per step from notes to finished text:
 
-- **`/ai-tells-auditor:ai-tells-writer`** drafts from your notes, outline, or brief in a chosen voice. It keeps every point in the notes and joins the points into connected paragraphs instead of writing one sentence per note. Where a fact is missing, it leaves a bracketed placeholder. It then runs the auditor and the editor on the draft and leaves the first draft, the audit report, and the finished draft side by side. Its report lists each sentence in the finished draft that isn't in the notes, so you decide whether it stays. It can also build a voice from your own writing.
-- **`/ai-tells-auditor:ai-tells-auditor`** audits a draft and reports ranked findings with a fix for each. It never changes the text. When you want fixes, it hands the findings you pick to the editor.
-- **`/ai-tells-auditor:ai-tells-editor`** is the only skill that changes text. It rewrites each flagged sentence in the voice and cuts repeats, announcers, and summaries. It works with the notes the draft came from or without them. Then `check_edit.py` checks that the edit didn't add a fact, and any number, name, or quote the source lacks becomes a bracketed placeholder. It also lists every sentence that adds a claim the source doesn't make, where the source is the notes or, without them, the original draft.
+- **`/ai-tells:ai-tells-writer`** drafts from your notes, outline, or brief in a chosen voice. It keeps every point in the notes and joins the points into connected paragraphs instead of writing one sentence per note. Where a fact is missing, it leaves a bracketed placeholder. It then runs the auditor and the editor on the draft and leaves the first draft, the audit report, and the finished draft side by side. Its report lists each sentence in the finished draft that isn't in the notes, so you decide whether it stays. It can also build a voice from your own writing.
+- **`/ai-tells:ai-tells-auditor`** audits a draft and reports ranked findings with a fix for each. It never changes the text. When you want fixes, it hands the findings you pick to the editor.
+- **`/ai-tells:ai-tells-editor`** is the only skill that changes text. It rewrites each flagged sentence in the voice and cuts repeats, announcers, and summaries. It works with the notes the draft came from or without them. Then `check_edit.py` checks that the edit didn't add a fact, and any number, name, or quote the source lacks becomes a bracketed placeholder. It also lists every sentence that adds a claim the source doesn't make, where the source is the notes or, without them, the original draft.
 
 The skills share one rules file, `skills/ai-tells-auditor/references/standard.md`. It sets what a draft may say (the source) and how a voice applies. It also lists the AI tells to remove and says how to keep sentences linked. The writer drafts to it and the editor edits to it. The auditor reports where a draft misses it. The rules appear nowhere else.
 
@@ -23,15 +23,15 @@ brew install vale    # or see https://vale.sh/docs/install
 **As a plugin** (Claude Code):
 
 ```
-/plugin marketplace add vestjoe/ai-tells-auditor
-/plugin install ai-tells-auditor@ai-tells-auditor
+/plugin marketplace add vestjoe/ai-tells
+/plugin install ai-tells@ai-tells
 ```
 
 **By hand:** copy the skill folders into your skills directory.
 
 ```bash
-git clone https://github.com/vestjoe/ai-tells-auditor.git
-cp -R ai-tells-auditor/skills/ai-tells-* ~/.claude/skills/
+git clone https://github.com/vestjoe/ai-tells.git
+cp -R ai-tells/skills/ai-tells-* ~/.claude/skills/
 ```
 
 On first use the skill runs `vale sync` to fetch the third-party packs, so it needs network access once.
@@ -41,10 +41,10 @@ On first use the skill runs `vale sync` to fetch the third-party packs, so it ne
 Run a skill by name, with the files after it:
 
 ```
-/ai-tells-auditor:ai-tells-writer notes/chapter4-outline.md
-/ai-tells-auditor:ai-tells-writer notes/chapter4-outline.md my-voice
-/ai-tells-auditor:ai-tells-auditor docs/launch-post.md
-/ai-tells-auditor:ai-tells-editor drafts/chapter4.md notes/chapter4-outline.md
+/ai-tells:ai-tells-writer notes/chapter4-outline.md
+/ai-tells:ai-tells-writer notes/chapter4-outline.md my-voice
+/ai-tells:ai-tells-auditor docs/launch-post.md
+/ai-tells:ai-tells-editor drafts/chapter4.md notes/chapter4-outline.md
 ```
 
 The writer saves its draft next to the notes as `<notes-name>.draft.md`. It audits that draft into `<notes-name>.audit.md`, then edits a copy into `<notes-name>.final.md`. The editor's own files, `<notes-name>.final.orig.md` and `<notes-name>.final.claims.md`, stay beside them. With no voice named, the writer uses `plain`.

@@ -1,13 +1,13 @@
 {
-  "name": "ai-tells-auditor",
-  "version": "0.5.0",
-  "description": "Three skills for clearer prose, one per step from notes to finished text. ai-tells-writer drafts from notes in a chosen voice and can build a voice from your writing. ai-tells-auditor flags AI tells and autopilot writing: stock phrases, inflated words, filler, hedges, em dashes, uniform rhythm, and content problems a linter can't see. ai-tells-editor edits a draft against the notes it came from, cutting without adding.",
+  "name": "ai-tells",
+  "version": "0.5.1",
+  "description": "Claude Code skills that draft from your notes in your voice. They catch the phrasing that makes text read as AI and fix it without adding facts your notes don't have.",
   "author": {
     "name": "Joe Vest",
     "url": "https://github.com/vestjoe"
   },
   "license": "MIT",
-  "repository": "https://github.com/vestjoe/ai-tells-auditor",
+  "repository": "https://github.com/vestjoe/ai-tells",
   "keywords": [
     "writing",
     "prose",

@@ -107,7 +107,7 @@ A robust estimator.
 
 When another skill runs this one for the report only, save the report to the path it gives and stop. Don't run the editor.
 
-When the user wants the fixes, run the editor skill (`/ai-tells-auditor:ai-tells-editor`) in the same answer. Do the same, without being asked, for pasted text short enough to send as-is (an email, a message, a bio, a paragraph): the user wants to send it soon, and a fixed version is more useful than an offer. If the user hasn't asked for fixes and the text is a file or long, end the report with an offer to run the editor on all the findings or on the ones the user picks.
+When the user wants the fixes, run the editor skill (`/ai-tells:ai-tells-editor`) in the same answer. Do the same, without being asked, for pasted text short enough to send as-is (an email, a message, a bio, a paragraph): the user wants to send it soon, and a fixed version is more useful than an offer. If the user hasn't asked for fixes and the text is a file or long, end the report with an offer to run the editor on all the findings or on the ones the user picks.
 
 When the user picks findings, mark each picked one in the report with `[fix]` and tell the editor to fix only those. Save the report to a file in a scratch directory, and give the editor the draft, the report, the notes or brief if the user has them, and the voice if one was named. The editor makes every change to the standard and checks its own edit.
 
