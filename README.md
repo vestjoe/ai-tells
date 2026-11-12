@@ -1,16 +1,11 @@
 # ai-tells
 
-A Claude Code plugin with three skills for clearer prose, one per step from notes to finished text:
+ai-tells is a Claude Code plugin for writing from your notes. It drafts in your voice, then finds the phrasing that makes text read as AI and fixes it. It never adds a fact your notes don't have. Where a fact is missing, it leaves a bracketed placeholder for you to fill.
 
-- **`/ai-tells:ai-tells-writer`** drafts from your notes, outline, or brief in a chosen voice. It keeps every point in the notes and joins the points into connected paragraphs instead of writing one sentence per note. Where a fact is missing, it leaves a bracketed placeholder. It then runs the auditor and the editor on the draft and leaves the first draft, the audit report, and the finished draft side by side. Its report lists each sentence in the finished draft that isn't in the notes, so you decide whether it stays. It can also build a voice from your own writing.
-- **`/ai-tells:ai-tells-auditor`** audits a draft and reports ranked findings with a fix for each. It never changes the text. When you want fixes, it hands the findings you pick to the editor.
-- **`/ai-tells:ai-tells-editor`** is the only skill that changes text. It rewrites each flagged sentence in the voice and cuts repeats, announcers, and summaries. It works with the notes the draft came from or without them. Then `check_edit.py` checks that the edit didn't add a fact, and any number, name, or quote the source lacks becomes a bracketed placeholder. It also lists every sentence that adds a claim the source doesn't make, where the source is the notes or, without them, the original draft.
-
-The skills share one rules file, `skills/ai-tells-auditor/references/standard.md`. It sets what a draft may say (the source) and how a voice applies. It also lists the AI tells to remove and says how to keep sentences linked. The writer drafts to it and the editor edits to it. The auditor reports where a draft misses it. The rules appear nowhere else.
-
-The auditor flags wordy, vague, and padded writing, and the patterns of writing on autopilot, by a person or a model. These include stock phrases, inflated words, set-up-and-reveal framing, editorial asides, hedges, em dashes, and uniform sentence rhythm.
-
-The auditor works in two passes. [Vale](https://vale.sh) checks the wording with a pinned config. Then Claude checks what a linter can't: invented specifics, unsourced claims about people, false balance, and repeated section formulas. You get one ranked list of findings with a fix for each.
+- **Write a draft from your notes.** `/ai-tells:ai-tells-writer` turns notes, an outline, or a brief into connected paragraphs and keeps every point in order. It then checks and edits its own draft, and leaves the first draft and the audit report next to the finished one. It also lists any sentence that isn't in your notes, and you decide whether it stays.
+- **Write in your own voice.** Give Claude samples of your writing, such as posts, reports, or a book, and it builds a voice profile from them. Drafts then follow your sentence length, layout, and habits. The profile stays on your machine and never quotes your samples. Without one, the writer uses the `plain` voice. See [Voices](#voices).
+- **Check a draft for AI tells.** `/ai-tells:ai-tells-auditor` works on any draft, whether you or a model wrote it. It ranks what it finds and gives a fix for each. It catches stock phrases, inflated words, filler, hedges, em dashes, and sentences that all run the same length. It also flags what a linter can't see, such as invented details and claims with no source. It reports and leaves the text alone.
+- **Fix a draft.** `/ai-tells:ai-tells-editor` rewrites the flagged sentences in your voice and cuts repeats and summaries. A script then compares the edit with your notes, or with the original when you have no notes. Any number, name, or quote the edit added becomes a placeholder.
 
 ## Install
 
@@ -38,7 +33,16 @@ On first use the skill runs `vale sync` to fetch the third-party packs, so it ne
 
 ## Use
 
-Run a skill by name, with the files after it:
+Ask Claude in your own words:
+
+- "Write a draft from `chapter5-notes.md` in my voice."
+- "Build a voice called `my-voice` from the files in `~/writing/samples/`."
+- "Check `docs/launch-post.md` for AI tells."
+- "Does this email sound like ChatGPT wrote it?" followed by the pasted text.
+- "Tighten this README and fix what you find." The auditor reports, and the editor makes the fixes.
+- "Edit `chapter4.md` against my outline in `chapter4-outline.md`."
+
+Or run a skill by name, with the files after it:
 
 ```
 /ai-tells:ai-tells-writer notes/chapter4-outline.md
@@ -53,16 +57,7 @@ The auditor reports and leaves the file alone. To apply fixes, ask for them or p
 
 The editor saves the original as `<name>.orig.md` and edits the draft in place. It runs `scripts/check_edit.py` to confirm the edit didn't add a fact. With notes, the script checks facts against the notes alone. Without notes, it checks them against the original draft.
 
-Or ask Claude in your own words:
-
-- "Check `docs/launch-post.md` for AI tells."
-- "Does this email sound like ChatGPT wrote it?" followed by the pasted text.
-- "Tighten this README and fix what you find." The auditor reports, and the editor makes the fixes.
-- "Edit `chapter4.md` against my outline in `chapter4-outline.md`."
-- "Write a draft from `chapter5-notes.md` in my voice."
-- "Build a voice called `my-voice` from the files in `~/writing/samples/`."
-
-Or run the linter pass yourself. From a clone of this repo:
+You can also run the linter pass yourself. From a clone of this repo:
 
 ```bash
 skills/ai-tells-auditor/scripts/audit.sh draft.md              # one line per finding
@@ -86,11 +81,17 @@ Person (`I`, `we`, or `you`) isn't part of a voice. The writer picks it for each
 
 The plugin comes with one voice, `plain`, in `skills/ai-tells-writer/voices/plain.md`. It's the default, and the example of the format.
 
-To build your own, ask Claude to build a voice from your writing samples and give it a name. The writer follows `references/build-voice.md`. It measures the samples and asks how you want new writing laid out. It runs the auditor on the samples, then writes the habits in new words and runs the auditor on the profile's own examples. Last, `scripts/check_voice.py` confirms the profile doesn't copy any run of 8 or more words from the samples.
+To build your own, ask Claude to build a voice from your writing samples and give it a name. The writer follows `references/build-voice.md`. It measures the samples, then asks you about the layout for new writing. It runs the auditor on the samples, then writes the habits in new words and runs the auditor on the profile's own examples. Last, `scripts/check_voice.py` confirms the profile doesn't copy any run of 8 or more words from the samples.
 
 Your profiles live in `~/.claude/voices/<name>.md`, outside the plugin, so they survive updates and reinstalls. The writer looks there first, then at the voices that come with the plugin.
 
 **Keep profiles and samples out of repositories.** Samples are often private, such as a book or client reports. Work on them in a scratch folder, and save the profile only to `~/.claude/voices/`.
+
+## How it works
+
+The skills share one rules file, `skills/ai-tells-auditor/references/standard.md`. It sets what a draft may say and how a voice applies. It also lists the AI tells to remove and says how to keep sentences linked. The writer and the editor both work to it, and the auditor reports where a draft misses it.
+
+The auditor works in two passes. [Vale](https://vale.sh) checks the wording with a pinned config. Then Claude reads the content for problems Vale doesn't catch, from invented specifics and unsourced claims about people to false balance and section formulas that repeat. You get one ranked list of findings with a fix for each.
 
 ## What's in the skills
 
@@ -107,7 +108,7 @@ In `skills/ai-tells-auditor/`:
   It also turns off pack rules that repeat another rule or whose hits don't need fixing, and says why for each.
 - `styles/Custom/`: our rules, one YAML file each. Alerts from them start with `Custom.`. `vale sync` downloads the other folders in `styles/`, and git ignores them.
 - `references/review-prompt.md`: the checklist for the judgment pass. It also works as a prompt for a person or another model.
-- `scripts/audit.sh`: runs Vale with this config, fetches the packs if they're missing, and prints one line per finding.
+- `scripts/audit.sh`: runs Vale with this config and prints one line per finding. It fetches the packs first if they're missing.
 
 In `skills/ai-tells-writer/`:
 
