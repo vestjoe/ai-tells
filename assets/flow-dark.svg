@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="640" viewBox="0 0 1180 640" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" role="img" aria-labelledby="title desc">
+<title id="title">How the ai-tells skills work together</title>
+<desc id="desc">Notes go to the writer, which makes a draft. That draft, or a draft you already have, goes to the auditor, which runs Vale and then Claude and writes a ranked report. The editor applies the fixes and checks that no new facts were added, producing the final draft. A voice built from your writing feeds all three skills, and all three read one shared rules file, standard.md.</desc>
+<style>.t{fill:#e6edf3} .m{fill:#9198a1}</style>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6e7681"/></marker><marker id="v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ab7df8"/></marker></defs>
+<rect width="1180" height="640" rx="16" fill="#161b22"/>
+<rect x="40" y="572" width="1100" height="40" rx="10" fill="#21262d"/>
+<text x="60" y="597" class="t" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="600">standard.md</text>
+<text x="168" y="597" class="m" font-size="13">the one rules file all three skills read: what a draft may say, how the voice applies, and which AI tells to remove</text>
+<path d="M305,260 V572" stroke="#6e7681" stroke-width="1.25" stroke-dasharray="2 4" fill="none"/>
+<path d="M705,360 V572" stroke="#6e7681" stroke-width="1.25" stroke-dasharray="2 4" fill="none"/>
+<path d="M890,538 V572" stroke="#6e7681" stroke-width="1.25" stroke-dasharray="2 4" fill="none"/>
+<path d="M40,40 H208 L220,52 V96 H40 Z" fill="#0d1117" stroke="#6e7681" stroke-width="1.5"/><path d="M208,40 V52 H220" fill="none" stroke="#6e7681" stroke-width="1.5"/><text x="54" y="64" class="t" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="600">your writing</text><text x="54" y="82" class="m" font-size="12">posts, reports, a book</text>
+<path d="M220,68 H262" stroke="#6e7681" stroke-width="2" fill="none" marker-end="url(#a)"/>
+<rect x="268" y="40" width="190" height="56" rx="28" fill="#271052" stroke="#ab7df8" stroke-width="2"/>
+<text x="290" y="64" fill="#ab7df8" font-size="16" font-weight="700">Build a voice</text>
+<text x="290" y="82" class="t" font-size="12">measures it, never quotes it</text>
+<path d="M458,68 H500" stroke="#6e7681" stroke-width="2" fill="none" marker-end="url(#a)"/>
+<path d="M506,40 H694 L706,52 V96 H506 Z" fill="#0d1117" stroke="#ab7df8" stroke-width="1.5"/><path d="M694,40 V52 H706" fill="none" stroke="#ab7df8" stroke-width="1.5"/><text x="520" y="64" class="t" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="600">my-voice.md</text><text x="520" y="82" class="m" font-size="12">kept in ~/.claude/voices/</text>
+<path d="M606,96 V132" stroke="#ab7df8" stroke-width="1.75" stroke-dasharray="6 5" fill="none"/>
+<path d="M305,132 H822" stroke="#ab7df8" stroke-width="1.75" stroke-dasharray="6 5" fill="none"/>
+<path d="M305,132 V186" stroke="#ab7df8" stroke-width="1.75" stroke-dasharray="6 5" fill="none" marker-end="url(#v)"/>
+<path d="M705,132 V264" stroke="#ab7df8" stroke-width="1.75" stroke-dasharray="6 5" fill="none" marker-end="url(#v)"/>
+<path d="M822,132 V418" stroke="#ab7df8" stroke-width="1.75" stroke-dasharray="6 5" fill="none" marker-end="url(#v)"/>
+<text x="620" y="124" fill="#ab7df8" font-size="12" font-weight="600">your voice, used by every step</text>
+<path d="M40,196 H178 L190,208 V252 H40 Z" fill="#0d1117" stroke="#6e7681" stroke-width="1.5"/><path d="M178,196 V208 H190" fill="none" stroke="#6e7681" stroke-width="1.5"/><text x="54" y="220" class="t" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="600">notes.md</text><text x="54" y="238" class="m" font-size="12">notes, outline, or brief</text>
+<path d="M190,224 H224" stroke="#6e7681" stroke-width="2" fill="none" marker-end="url(#a)"/>
+<rect x="230" y="188" width="150" height="72" rx="12" fill="#0c2d6b" stroke="#4493f8" stroke-width="2"/><text x="246" y="218" fill="#4493f8" font-size="19" font-weight="700">Writer</text><text x="246" y="240" class="t" font-size="13">drafts from notes</text>
+<path d="M380,224 H424" stroke="#6e7681" stroke-width="2" fill="none" marker-end="url(#a)"/>
+<path d="M430,196 H548 L560,208 V252 H430 Z" fill="#0d1117" stroke="#6e7681" stroke-width="1.5"/><path d="M548,196 V208 H560" fill="none" stroke="#6e7681" stroke-width="1.5"/><text x="444" y="220" class="t" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="600">draft.md</text><text x="444" y="238" class="m" font-size="12">first draft</text>
+<path d="M560,224 C600,224 590,292 614,292" stroke="#6e7681" stroke-width="2" fill="none" marker-end="url(#a)"/>
+<path d="M40,396 H198 L210,408 V452 H40 Z" fill="#0d1117" stroke="#6e7681" stroke-width="1.5"/><path d="M198,396 V408 H210" fill="none" stroke="#6e7681" stroke-width="1.5"/><text x="54" y="420" class="t" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="600">your draft</text><text x="54" y="438" class="m" font-size="12">or one a model wrote</text>
+<path d="M210,424 H520 C580,424 580,330 614,330" stroke="#6e7681" stroke-width="2" fill="none" marker-end="url(#a)"/>
+<text x="330" y="414" class="m" font-size="12" font-style="italic">already have a draft? start here</text>
+<rect x="620" y="266" width="170" height="94" rx="12" fill="#3b2300" stroke="#d29922" stroke-width="2"/><text x="636" y="296" fill="#d29922" font-size="19" font-weight="700">Auditor</text><text x="636" y="318" class="t" font-size="13">Vale, then Claude</text><text x="636" y="336" class="t" font-size="13">reports, never edits</text>
+<path d="M790,315 H834" stroke="#6e7681" stroke-width="2" fill="none" marker-end="url(#a)"/>
+<path d="M840,287 H978 L990,299 V343 H840 Z" fill="#0d1117" stroke="#6e7681" stroke-width="1.5"/><path d="M978,287 V299 H990" fill="none" stroke="#6e7681" stroke-width="1.5"/><text x="854" y="311" class="t" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="600">audit.md</text><text x="854" y="329" class="m" font-size="12">ranked, a fix for each</text>
+<path d="M915,343 V414" stroke="#6e7681" stroke-width="2" fill="none" marker-end="url(#a)"/>
+<text x="925" y="384" class="m" font-size="12">fixes</text>
+<rect x="805" y="420" width="170" height="76" rx="12" fill="#04260f" stroke="#3fb950" stroke-width="2"/><text x="821" y="450" fill="#3fb950" font-size="19" font-weight="700">Editor</text><text x="821" y="472" class="t" font-size="13">rewrites in your voice</text>
+<rect x="805" y="504" width="170" height="34" rx="8" fill="#0d1117" stroke="#3fb950" stroke-width="1.25" stroke-dasharray="4 3"/>
+<text x="817" y="518" class="t" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">check_edit.py</text>
+<text x="817" y="532" class="m" font-size="11">no fact your notes lack</text>
+<path d="M975,458 H1014" stroke="#6e7681" stroke-width="2" fill="none" marker-end="url(#a)"/>
+<path d="M1020,430 H1138 L1150,442 V486 H1020 Z" fill="#0d1117" stroke="#3fb950" stroke-width="1.5"/><path d="M1138,430 V442 H1150" fill="none" stroke="#3fb950" stroke-width="1.5"/><text x="1034" y="454" class="t" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="600">final.md</text><text x="1034" y="472" class="m" font-size="12">ready to read</text>
+<text x="1020" y="506" class="m" font-size="11">a missing fact stays</text>
+<text x="1020" y="521" class="m" font-size="11">a <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">[placeholder]</tspan></text>
+</svg>

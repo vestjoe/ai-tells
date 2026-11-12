@@ -7,6 +7,11 @@ ai-tells is a Claude Code plugin for writing from your notes. It drafts in your 
 - **Check a draft for AI tells.** `/ai-tells:ai-tells-auditor` works on any draft, whether you or a model wrote it. It ranks what it finds and gives a fix for each. It catches stock phrases, inflated words, filler, hedges, em dashes, and sentences that all run the same length. It also flags what a linter can't see, such as invented details and claims with no source. It reports and leaves the text alone.
 - **Fix a draft.** `/ai-tells:ai-tells-editor` rewrites the flagged sentences in your voice and cuts repeats and summaries. A script then compares the edit with your notes, or with the original when you have no notes. Any number, name, or quote the edit added becomes a placeholder.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/flow-dark.svg">
+  <img alt="Notes go to the writer, which makes a draft. The auditor checks that draft, or one you already have, and writes a ranked report. The editor applies the fixes and checks that no fact was added. A voice built from your writing feeds all three skills, and all three read one rules file, standard.md." src="assets/flow-light.svg">
+</picture>
+
 ## Install
 
 You need Vale on your `PATH`:
